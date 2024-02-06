@@ -1,191 +1,190 @@
 [
-    {
-      "resumen": "Soy un apasionado por la programación y la innovación tecnológica. Con 3 años de experiencia en el desarrollo de aplicaciones web y móviles. He liderado equipos en proyectos exitosos que han mejorado la eficiencia operativa en un 25%.",
-      "datos_personales": {
-        "nombre": "Isabella",
-        "apellido": "Gutiérrez",
-        "direccion": {
-          "pais": "Colombia",
-          "estado": "Cundinamarca",
-          "ciudad": "Bogotá",
-          "residencia": "Barrio El Dorado"
-        },
-        "telefono": ["3129876543"],
-        "email": "isabella.gutierrez@example.com",
-        "redes": {
-          "facebook": "Isabella Gutiérrez",
-          "instagram": "@isabella.g",
-          "github": "isabella_dev"
+  {
+    "resumen": "Soy un apasionado por la programacion y la innovacion tecnologica. Con 3 anios de experiencia en el desarrollo de aplicaciones web y moviles. He liderado equipos en proyectos exitosos que han mejorado la eficiencia operativa en un 25%.",
+    "datos_personales": {
+      "nombre": "Isabella",
+      "apellido": "Gutierrez",
+      "direccion": {
+        "pais": "Colombia",
+        "estado": "Cundinamarca",
+        "ciudad": "Bogota",
+        "residencia": "Barrio El Dorado"
+      },
+      "telefono": ["3129876543"],
+      "email": "isabella.gutierrez@example.com",
+      "redes": {
+        "facebook": "Isabella Gutierrez",
+        "instagram": "@isabella.g",
+        "github": "isabella_dev"
+      }
+    },
+    "educacion": {
+      "nivel": "Educacion Universitaria",
+      "titulo": ["Ingenieria de Sistemas"],
+      "institucion": ["Universidad Nacional de Colombia"]
+    },
+    "laboral": {
+      "pasantia": [
+        {
+          "duracion": "3 meses",
+          "lugar": "EmpresaXYZ",
+          "cargo": "Desarrollador Junior"
         }
-      },
-      "educacion": {
-        "nivel": "Educación Universitaria",
-        "titulo": ["Ingeniería de Sistemas"],
-        "institucion": ["Universidad Nacional de Colombia"]
-      },
-      "laboral": {
-        "pasantia": [
-          {
-            "duracion": "3 meses",
-            "lugar": "EmpresaXYZ",
-            "cargo": "Desarrollador Junior"
-          }
-        ],
-        "trabajos": [
-          {
-            "modalidad": "Tiempo completo",
-            "actividad": "Desarrollo de Aplicaciones Móviles",
-            "fecha": "10-02-2023"
-          }
-        ]
-      },
-      "habilidades": [
-        "Java",
-        "React",
-        "Swift",
-        "MongoDB",
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "Git"
       ],
-      "intereses": ["Innovación tecnológica", "Desarrollo sostenible", "Viajes"]
-    },
-
-
-    {
-      "resumen": "Soy un entusiasta del diseño gráfico y la creatividad visual. Con 4 años de experiencia en el diseño de interfaces de usuario y experiencia de usuario para aplicaciones web y móviles. Mi enfoque es crear diseños intuitivos y atractivos que mejoren la experiencia del usuario.",
-      "datos_personales": {
-        "nombre": "Camila",
-        "apellido": "Hernández",
-        "direccion": {
-          "pais": "Argentina",
-          "estado": "Buenos Aires",
-          "ciudad": "CABA",
-          "residencia": "Palermo"
-        },
-        "telefono": ["1156784321"],
-        "email": "camila.hernandez@example.com",
-        "redes": {
-          "facebook": "Camila Hernández",
-          "instagram": "@camilah.design",
-          "github": "camilah_designer"
+      "trabajos": [
+        {
+          "modalidad": "Tiempo completo",
+          "actividad": "Desarrollo de Aplicaciones Moviles",
+          "fecha": "10-02-2023"
         }
+      ]
+    },
+    "habilidades": [
+      "Java",
+      "React",
+      "Swift",
+      "MongoDB",
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Git"
+    ],
+    "intereses": ["Innovacion tecnologica", "Desarrollo sostenible", "Viajes"]
+  },
+
+
+  {
+    "resumen": "Soy un entusiasta del diseno grafico y la creatividad visual. Con 4 anos de experiencia en el diseno de interfaces de usuario y experiencia de usuario para aplicaciones web y moviles. Mi enfoque es crear disenos intuitivos y atractivos que mejoren la experiencia del usuario.",
+    "datos_personales": {
+      "nombre": "Camila",
+      "apellido": "Hernandez",
+      "direccion": {
+        "pais": "Argentina",
+        "estado": "Buenos Aires",
+        "ciudad": "CABA",
+        "residencia": "Palermo"
       },
-      "educacion": {
-        "nivel": "Educación Universitaria",
-        "titulo": ["Diseño Gráfico"],
-        "institucion": ["Universidad de Buenos Aires"]
-      },
-      "laboral": {
-        "pasantia": [
-          {
-            "duracion": "6 meses",
-            "lugar": "Estudio de Diseño XYZ",
-            "cargo": "Diseñadora Junior"
-          }
-        ],
-        "trabajos": [
-          {
-            "modalidad": "Freelancer",
-            "actividad": "Diseño de Interfaces de Usuario",
-            "fecha": "15-05-2022"
-          }
-        ]
-      },
-      "habilidades": [
-        "Adobe Illustrator",
-        "Adobe Photoshop",
-        "Sketch",
-        "InVision",
-        "UI/UX Design",
-        "Prototipado"
+      "telefono": ["1156784321"],
+      "email": "camila.hernandez@example.com",
+      "redes": {
+        "facebook": "Camila Hernandez",
+        "instagram": "@camilah.design",
+        "github": "camilah_designer"
+      }
+    },
+    "educacion": {
+      "nivel": "Educacion Universitaria",
+      "titulo": ["Diseno Grafico"],
+      "institucion": ["Universidad de Buenos Aires"]
+    },
+    "laboral": {
+      "pasantia": [
+        {
+          "duracion": "6 meses",
+          "lugar": "Estudio de Diseno XYZ",
+          "cargo": "Disenadora Junior"
+        }
       ],
-      "intereses": ["Diseño de Interfaces", "Arte digital", "Viajes"]
-    },
-
-
-    {
-      "resumen": "Soy un profesional en finanzas con 7 años de experiencia en análisis de inversiones y gestión de carteras. He trabajado en entidades financieras reconocidas y he contribuido al crecimiento de los activos bajo gestión. Apasionado por el mercado de valores y las estrategias de inversión.",
-      "datos_personales": {
-        "nombre": "Luis",
-        "apellido": "Martínez",
-        "direccion": {
-          "pais": "México",
-          "estado": "Ciudad de México",
-          "ciudad": "Polanco",
-          "residencia": "Avenida Reforma"
-        },
-        "telefono": ["5523456789"],
-        "email": "luis.martinez@example.com",
-        "redes": {
-          "linkedin": "Luis Martínez",
-          "twitter": "@luisfinanzas",
-          "github": "luis_investor"
+      "trabajos": [
+        {
+          "modalidad": "Freelancer",
+          "actividad": "Diseno de Interfaces de Usuario",
+          "fecha": "15-05-2022"
         }
-      },
-      "educacion": {
-        "nivel": "Educación Universitaria",
-        "titulo": ["Finanzas"],
-        "institucion": ["Universidad Nacional Autónoma de México"]
-      },
-      "laboral": {
-        "trabajos": [
-          {
-            "empresa": "Banco Internacional",
-            "cargo": "Analista de Inversiones",
-            "fecha": "01-08-2018 - Presente"
-          },
-          {
-            "empresa": "Fondo de Inversiones XYZ",
-            "cargo": "Gestor de Carteras",
-            "fecha": "15-03-2015 - 30-06-2018"
-          }
-        ]
-      },
-      "habilidades": ["Análisis financiero", "Gestión de carteras", "Mercado de valores", "Modelos financieros"]
+      ]
     },
+    "habilidades": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Sketch",
+      "InVision",
+      "UI/UX Design",
+      "Prototipado"
+    ],
+    "intereses": ["Diseno de Interfaces", "Arte digital", "Viajes"]
+  },
 
-    
-    {
-      "resumen": "Soy un ingeniero ambiental con experiencia en proyectos de sostenibilidad y gestión de recursos naturales. He trabajado en la implementación de prácticas eco-amigables en diversas industrias. Comprometido con la conservación del medio ambiente y el desarrollo sostenible.",
-      "datos_personales": {
-        "nombre": "Laura",
-        "apellido": "González",
-        "direccion": {
-          "pais": "España",
-          "region": "Cataluña",
-          "ciudad": "Barcelona",
-          "residencia": "Poble Sec"
+
+  {
+    "resumen": "Soy un profesional en finanzas con 7 anos de experiencia en analisis de inversiones y gestion de carteras. He trabajado en entidades financieras reconocidas y he contribuido al crecimiento de los activos bajo gestion. Apasionado por el mercado de valores y las estrategias de inversion.",
+    "datos_personales": {
+      "nombre": "Luis",
+      "apellido": "Martinez",
+      "direccion": {
+        "pais": "Mexico",
+        "estado": "Ciudad de Mexico",
+        "ciudad": "Polanco",
+        "residencia": "Avenida Reforma"
+      },
+      "telefono": ["5523456789"],
+      "email": "luis.martinez@example.com",
+      "redes": {
+        "linkedin": "Luis Martinez",
+        "twitter": "@luisfinanzas",
+        "github": "luis_investor"
+      }
+    },
+    "educacion": {
+      "nivel": "Educacion Universitaria",
+      "titulo": ["Finanzas"],
+      "institucion": ["Universidad Nacional Autonoma de Mexico"]
+    },
+    "laboral": {
+      "trabajos": [
+        {
+          "empresa": "Banco Internacional",
+          "cargo": "Analista de Inversiones",
+          "fecha": "01-08-2018 - Presente"
         },
-        "telefono": ["34987654321"],
-        "email": "laura.gonzalez@example.com",
-        "redes": {
-          "linkedin": "Laura González",
-          "instagram": "@lauraeco",
-          "github": "laura_sostenible"
+        {
+          "empresa": "Fondo de Inversiones XYZ",
+          "cargo": "Gestor de Carteras",
+          "fecha": "15-03-2015 - 30-06-2018"
         }
-      },
-      "educacion": {
-        "nivel": "Educación Universitaria",
-        "titulo": ["Ingeniería Ambiental"],
-        "institucion": ["Universitat Politècnica de Catalunya"]
-      },
-      "laboral": {
-        "trabajos": [
-          {
-            "empresa": "Consultora Ambiental XYZ",
-            "cargo": "Ingeniera Ambiental",
-            "fecha": "10-05-2017 - Presente"
-          },
-          {
-            "empresa": "Proyectos Sostenibles S.A.",
-            "cargo": "Coordinadora de Proyectos",
-            "fecha": "01-02-2015 - 05-05-2017"
-          }
-        ]
-      },
-      "habilidades": ["Gestión ambiental", "Evaluación de impacto ambiental", "Desarrollo sostenible", "Educación ambiental"]
-    }
-  ]
+      ]
+    },
+    "habilidades": ["Analisis financiero", "Gestion de carteras", "Mercado de valores", "Modelos financieros"]
+  },
+
   
+  {
+    "resumen": "Soy un ingeniero ambiental con experiencia en proyectos de sostenibilidad y gestion de recursos naturales. He trabajado en la implementacion de practicas eco-amigables en diversas industrias. Comprometido con la conservacion del medio ambiente y el desarrollo sostenible.",
+    "datos_personales": {
+      "nombre": "Laura",
+      "apellido": "Gonzalez",
+      "direccion": {
+        "pais": "Espana",
+        "region": "Cataluna",
+        "ciudad": "Barcelona",
+        "residencia": "Poble Sec"
+      },
+      "telefono": ["34987654321"],
+      "email": "laura.gonzalez@example.com",
+      "redes": {
+        "linkedin": "Laura Gonzalez",
+        "instagram": "@lauraeco",
+        "github": "laura_sostenible"
+      }
+    },
+    "educacion": {
+      "nivel": "Educacion Universitaria",
+      "titulo": ["Ingenieria Ambiental"],
+      "institucion": ["Universitat Politecnica de Catalunya"]
+    },
+    "laboral": {
+      "trabajos": [
+        {
+          "empresa": "Consultora Ambiental XYZ",
+          "cargo": "Ingeniera Ambiental",
+          "fecha": "10-05-2017 - Presente"
+        },
+        {
+          "empresa": "Proyectos Sostenibles S.A.",
+          "cargo": "Coordinadora de Proyectos",
+          "fecha": "01-02-2015 - 05-05-2017"
+        }
+      ]
+    },
+    "habilidades": ["Gestion ambiental", "Evaluacion de impacto ambiental", "Desarrollo sostenible", "Educacion ambiental"]
+  }
+]
