@@ -30,7 +30,7 @@ def insert_data(collection):
         print("Los datos ya han sido insertados anteriormente.")
 
 
-#Buscar CV por código
+#Buscar CV por ID
 def buscar_cv_por_id(collection):
     cv_id = input("Ingrese el ID del currículum a buscar: ")
 
@@ -47,6 +47,23 @@ def buscar_cv_por_id(collection):
         print("ID no válido. Por favor, ingrese un ID de currículum válido.")
 
 
+#Eliminar CV por ID 
+def eliminar_cv_por_id(collection):
+    cv_id = input("Ingrese el ID del currículum a eliminar: ")
+
+    try:
+        cv_object_id = ObjectId(cv_id)
+        result = collection.delete_one({"_id": cv_object_id})
+
+        if result.deleted_count > 0:
+            print(f"Se eliminó correctamente el currículum con ID: {cv_id}")
+        else:
+            print(f"No se encontró ningún currículum con el ID: {cv_id}")
+    except (ValueError, bson.errors.InvalidId):
+        print("ID no válido. Por favor, ingrese un ID de currículum válido.")
+
+
+
 #Opciones del menú
 def show_menu():
     print("Selecciona una opción:")
@@ -60,7 +77,7 @@ def show_menu():
     print("8. Salir")
 
 
-#Programa
+#Programa principal 
 def main():
     collection = connect_to_mongodb()
 
@@ -77,7 +94,7 @@ def main():
             elif opcion == 2:
                 print("opcion 1")
             elif opcion == 3:
-                print("opcion 1")
+                eliminar_cv_por_id(collection)               
             elif opcion == 4:
                 buscar_cv_por_id(collection)
             elif opcion == 5:
