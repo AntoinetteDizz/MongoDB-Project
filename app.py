@@ -152,7 +152,112 @@ def mostrar_todos_cv(collection):
 
 
 #PONER AQUÍ LAS FUNCIONES DE AGREGAR CV
+    
+# FUNCION QUE SE ENCARGA DE VERIFICAR SI LA INSERCION FUE EXITOSA 
+def verificarInsercion(resultado):
+    if resultado.acknowledged:
+        print("INSERCION EXITOSA, BAJO EL ID : ",resultado.inserted_id,"\n")
+        time.sleep(5)
+        return True
+    else:
+        print("LA INSERCION NO FUE EXITOSA \n")
+        time.sleep(3)
+        return False
 
+# INGRESA UN DOCUMENTO A LA BASE DE DATOS
+    
+#FUNCION QUE SE ENCARGA DE RECIBIR UN DOCUMENTO POR PARAMETRO E INGRESARLO A LA BD
+def ingresarCV(documento):
+    # INSERTA EN LA BD LOS DATOS PREPARADOS CON LA INFORMACION REGISTRADA POR EL USUARIO
+    resultado = collection.insert_one(documento)
+    verificarInsercion(resultado)
+
+#FUNCION QUE SOLICITA AL USUARIO QUE INGRESE LOS DATOS DEL CV A INGRESAR
+
+def solicitarDatosCV():
+
+    resumen = input("RESUMEN CURRICULAR\n")
+    nombre = input("NOMBRE\n")
+    apellido = input("APELLIDO\n")
+
+    print("\t\tDATOS DE DIRECCION")
+
+    pais = input("PAIS\n")
+    estado = input("ESTADO\n")
+    ciudad = input("CIUDAD\n")
+    residencia = input("RESIDENCIA\n")
+
+    telefonos = input("TELEFONO, SI TIENE VARIOS SEPARAR CON COMA\n").split(",")
+    email = input("EMAIL\n")
+    facebook = input("FACEBOOK\n")
+    instagram = input("INSTAGRAM\n")
+    github = input("GITHUB\n")
+
+    print("\t\tDATOS DE EDUCACION")
+    nivel = input("NIVEL DE EDUCACION\n")
+    titulos = input("TITULOS QUE POSEE, SEPARADOS POR UNA COMA\n").split(",")
+    instituciones = input("INSTITUCIONES, SEPARADOS POR UNA COMA\n").split(",")
+    
+    pasantia = [] # Lista para guardar los datos de la pasantía
+    trabajos = [] # Lista para guardar los datos de los trabajos
+
+    while True: # Bucle para repetir el proceso hasta que el usuario escriba 'N o n'
+        opcion = input("QUIERES REGISTRAR UNA PASANTIA - S/N: ")
+        if opcion == "S" or opcion == "s":
+            duracion = input("DURACION DE LA PASANTIA\n")
+            lugar = input("LUGAR DE LA PASANTIA: \n")
+            cargo = input("CARGO EN LA PASANTIA: \n ")
+            pasantia.append({"duracion": duracion, "lugar": lugar, "cargo": cargo}) # Se agrega un diccionario con los datos de la pasantía a la lista
+        elif opcion == "N" or opcion == "n": # Si el usuario escribe 'N', se sale del bucle
+            break
+    while True: # Bucle para repetir el proceso hasta que el usuario escriba 'n o N'
+        opcion = input("QUIERES REGISTRAR UN TRABAJO - S/N: ")
+        if opcion == "S" or opcion == "s":
+            modalidad = input("INGRESE MODALIDAD DEL TRABAJO ")
+            actividad = input("INGRESAR ACTIVIDAD DEL TRABAJO ")
+            fecha = input("INGRESAR FECHA DEL TRABAJO ")
+            trabajos.append({"modalidad": modalidad, "actividad": actividad, "fecha": fecha}) # Se agrega un diccionario con los datos del trabajo a la lista
+        elif opcion == "N" or opcion == "n": # Si el usuario escribe 'n o N', se sale del bucle
+            break
+
+        
+    habilidades = input("HABILIDADES, SEPARADOS POR UNA COMA\n").split(",")
+    intereses = input("INTERESES, SEPARADOS POR UNA COMA\n").split(",")
+
+    # Crear un diccionario con la estructura "laboral" y los valores de las listas
+
+    #  PREPARA LA ESTRUCTURA JSON CON LOS DATOS INGRESAROR PARA INSERTARLO EN LA BD
+    documento = {}
+    documento["resumen"] = resumen
+    documento["datos_personales"] = {}
+    documento["datos_personales"]["nombre"] = nombre
+    documento["datos_personales"]["apellido"] = apellido
+    documento["direccion"] = {}
+    documento["direccion"]["pais"] = pais
+    documento["direccion"]["estado"] = estado
+    documento["direccion"]["ciudad"] = ciudad
+    documento["direccion"]["residencia"] = residencia
+
+    documento["telefono"] = telefonos
+    documento["email"] = email
+    documento["redes"] = {}
+    documento["redes"]["facebook"] = facebook
+    documento["redes"]["instagram"] = instagram
+    documento["redes"]["github"] = github
+
+    documento["educacion"] = {}
+    documento["educacion"]["nivel"] = nivel
+    documento["educacion"]["titulo"] = titulos
+    documento["educacion"]["institucion"] = instituciones
+
+    documento["laboral"] = {}
+    documento["laboral"]["pasantia"] = pasantia
+    documento["laboral"]["pasantia"] = trabajos
+
+    documento["habilidades"] = habilidades
+    documento["intereses"] = intereses
+
+    ingresarCV(documento)
 
 #Opciones del menú
 def show_menu():
@@ -185,7 +290,7 @@ def main():
         try:
             opcion = int(input("Ingrese opción => "))
             if opcion == 1:
-                print("opcion 1")
+                solicitarDatosCV()
             elif opcion == 2:
                 print("opcion 1")
             elif opcion == 3:
