@@ -150,8 +150,6 @@ def mostrar_todos_cv(collection):
 
     print("Fin de la lista de currículums.\n")
 
-
-#PONER AQUÍ LAS FUNCIONES DE AGREGAR CV
     
 # FUNCION QUE SE ENCARGA DE VERIFICAR SI LA INSERCION FUE EXITOSA 
 def verificarInsercion(resultado):
@@ -164,13 +162,15 @@ def verificarInsercion(resultado):
         time.sleep(3)
         return False
 
+
 # INGRESA UN DOCUMENTO A LA BASE DE DATOS
-    
 def ingresarCV(documento):
     # INSERTA EN LA BD LOS DATOS PREPARADOS CON LA INFORMACION REGISTRADA POR EL USUARIO
     resultado = collection.insert_one(documento)
     verificarInsercion(resultado)
 
+
+# Solicitar datos del CV
 def solicitarDatosCV():
     resumen = input("RESUMEN CURRICULAR\n")
     nombre = input("NOMBRE\n")
@@ -261,10 +261,12 @@ def solicitarDatosCV():
 
     ingresarCV(documento)
 
+
+
 #FUNCIONES PARA REALIZAR MODIFICACIONES EN LOS DATOS DE LOS CV
 
-# VERIFICA SI LA INSERCION DE UN DOCUMENTO FUE EXITOSA O NO
 
+# VERIFICA SI LA INSERCION DE UN DOCUMENTO FUE EXITOSA O NO
 def verificarInsercion(resultado):
     if resultado.acknowledged:
         print("INSERCION EXITOSA, BAJO EL ID : ",resultado.inserted_id,"\n")
@@ -272,6 +274,7 @@ def verificarInsercion(resultado):
     else:
         print("LA INSERCION NO FUE EXITOSA \n")
         return False
+
 
 #MUESTRA EN PANTALLA NOMBRE Y RESUMEN DE CV DE CADA PERSONA
 def mostrarNombresResumen():
@@ -286,6 +289,7 @@ def mostrarNombresResumen():
     
     print("---------------------------------------------------------------------------------------------------------------------------------------------")
 
+
 #BUSCA UN ID DE DATO A INDICE INDICADO POR PARAMETRO
 def buscarId(indice):
     results = collection.find()
@@ -297,6 +301,7 @@ def buscarId(indice):
         print(" NO SE ENCONTRO EL ID DEL INDICE {} \n".format(indice))
     else:
         return id
+
 
 #DEVUELVE EL INDICE QUE EL USUARIO HAYA MARCADO
 def buscarIndice():
@@ -316,8 +321,8 @@ def buscarIndice():
 
     return indice    
 
-#SOLICITA LOS DATOS PERSONALES QUE SERA MODIFICADOS
 
+#SOLICITA LOS DATOS PERSONALES QUE SERA MODIFICADOS
 def modificacionDeDatosPersonales(id):
     result = collection.find_one({"_id":id})
 
@@ -351,24 +356,24 @@ def modificacionDeDatosPersonales(id):
     documentoRedes = pedirRedes()
     modificarRedes(id,documentoRedes)
 
-#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE REDES EN LOS CV
 
+#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE REDES EN LOS CV
 def modificarRedes(id,redes):
     filtro = {"_id":id}
     operacion = {"$set":{"datos_personales.redes": redes}}
     resultado = collection.update_one(filtro,operacion)
     verificarActualizacion(resultado,"MODIFICACION DE REDES")
 
-#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE EMAIL EN LOS CV
 
+#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE EMAIL EN LOS CV
 def modificarEmail(id,nuevoEmail):
     filtro = {"_id":id}
     modificacion = {"$set":{"datos_personales.email":nuevoEmail}}
     resultado = collection.update_one(filtro,modificacion)
     verificarActualizacion(resultado,"MODIFICACION DE EMAIL")
 
-#SOLICITA LAS REDES PARA INGRESARLAS EN LA BD
 
+#SOLICITA LAS REDES PARA INGRESARLAS EN LA BD
 def pedirRedes():
     facebook = input("INGRESAR USUARIO FACEBOOK\n")
     instagram = input("INGRESAR USUARIO INSTAGRAM\n")
@@ -381,34 +386,34 @@ def pedirRedes():
     }
     return documentoRedes
 
-#SOLICITA EL EMAIL POR PATALLA Y LO RETORNA
 
+#SOLICITA EL EMAIL POR PATALLA Y LO RETORNA
 def pedirEmail():
     email = input("INGRESE EL NUEVO EMAIL\n")
     return email
 
-#MODIFICA UN TELFONO YA EXISTENTE DENTRO DE LA BD
 
+#MODIFICA UN TELFONO YA EXISTENTE DENTRO DE LA BD
 def modificarTelefono(id,indice,telefono):
     filtro = {"_id" :id,f"datos_personales.telefono.{indice}": {"$exists": True}}
     operacion = {"$set": {f"datos_personales.telefono.{indice}": telefono}}
     verificarActualizacion(collection.update_one(filtro, operacion),"TELFONO MODIFICADO")
 
-#AGREGA UN NUEVO TELEFONO A LA COLECCION 
 
+#AGREGA UN NUEVO TELEFONO A LA COLECCION 
 def agregarTelefono(id,telefono):
     filtro = {"_id" :id}
     operacion = {"$push": {"datos_personales.telefono": telefono}}
     verificarActualizacion(collection.update_one(filtro, operacion),"TELEFONO AGREGADO")
 
-#SOLICITA POR PANTALLA AL USUARIO QUE INGRESE EL NUEVO TELEFONO
 
+#SOLICITA POR PANTALLA AL USUARIO QUE INGRESE EL NUEVO TELEFONO
 def pedirTelefono():
     telefono = input("INGRESE EL NUEVO TELEFONO\n")
     return telefono
 
-#BUSCA UN INDICE ESPECIFICO DENTRO DEL ARRAY QUE ALMACENA LOS TELEFONOS EN LA BD
 
+#BUSCA UN INDICE ESPECIFICO DENTRO DEL ARRAY QUE ALMACENA LOS TELEFONOS EN LA BD
 def buscarIndiceTelefono(id):
     filtro = {"_id":id}
     proyeccion = {"datos_personales.telefono": 1,"_id":0}
@@ -428,20 +433,21 @@ def buscarIndiceTelefono(id):
     else:
         iterador = iterador - 1
         return iterador
-    
+
+
 #SOLICITA EL APELLIDO PARA SER MODIFICADO EN LA BD
 def pedirApellido():
     apellido = input("NUEVO NOMBRE PARA EL CV - ESCRIBIR M o m PARA MANTENER EL ANTERIOR\n")
     return apellido
 
-#SOLICITA EL NOMBRE PARA SER MODIFICADO EN LA BD
 
+#SOLICITA EL NOMBRE PARA SER MODIFICADO EN LA BD
 def pedirNombre():
     nombre = input("NUEVO NOMBRE PARA EL CV - ESCRIBIR M o m PARA MANTENER EL ANTERIOR\n")
     return nombre
 
-#SOLICITA EL DATOS DE DIRECCION PARA SER MODIFICADO EN LA BD
 
+#SOLICITA EL DATOS DE DIRECCION PARA SER MODIFICADO EN LA BD
 def pedirDatosDireccion():
     print("MODIFCAR DATOS DE DIRECCION\n")
     pais = input("PAIS\n")
@@ -457,8 +463,8 @@ def pedirDatosDireccion():
     }
     return documentoDireccion
 
-#EJECUTA EL QUERY PARA MODIFICAR UN NOMBRE DE UN CV
 
+#EJECUTA EL QUERY PARA MODIFICAR UN NOMBRE DE UN CV
 def modificarNombre(id,nuevoNombre):
     if nuevoNombre == "m" or nuevoNombre == "M":
         return
@@ -467,8 +473,8 @@ def modificarNombre(id,nuevoNombre):
         modificacion = {"$set":{"datos_personales.nombre":nuevoNombre}}
         collection.update_one(filtro,modificacion)
 
-#EJECUTA EL QUERY PARA MODIFICAR UN APELLIDO DE UN CV
 
+#EJECUTA EL QUERY PARA MODIFICAR UN APELLIDO DE UN CV
 def modificarApellido(id,nuevoApellido):
     if nuevoApellido == "m" or nuevoApellido == "M":
         return
@@ -477,13 +483,14 @@ def modificarApellido(id,nuevoApellido):
         modificacion = {"$set":{"datos_personales.apellido":nuevoApellido}}
         collection.update_one(filtro,modificacion)
 
-#EJECUTA EL QUERY PARA MODIFICAR UNA DIRECCION DE UN CV
 
+#EJECUTA EL QUERY PARA MODIFICAR UNA DIRECCION DE UN CV
 def modificarDireccion(id,documento):
     filtro = {"_id":id}
     operacion = {"$set":{"datos_personales.direccion": documento}}
     resultado = collection.update_one(filtro,operacion)
     verificarActualizacion(resultado,"MODIFICACION DIRECCION")
+
 
 # VERIFICA QUE SI LA ULTIMA ACTUALIZACION FUE EJECUTA CON EXITO O NO
 def verificarActualizacion(resultado,mensagge):
@@ -496,9 +503,8 @@ def verificarActualizacion(resultado,mensagge):
         time.sleep(2)
         return False
 
+
 # SOLICITA LOS DATOS PARA MODIFICAR EL RESUMEN Y LOS MODIFICA
-
-
 def modificacionDeResumen(id):
     resumen = input(("INGRESE EL NUEVO RESUMEN CURRICULAR\n"))
     filtro = {"_id":id}
@@ -506,8 +512,8 @@ def modificacionDeResumen(id):
     resultado = collection.update_one(filtro,proyeccion)
     verificarActualizacion(resultado,"ACTUALIZACION DE RESUMEN")
 
-# SOLICITA LOS DATOS PARA MODIFICAR LOS DATOS DE EDUCACION Y LOS MODIFICA
 
+# SOLICITA LOS DATOS PARA MODIFICAR LOS DATOS DE EDUCACION Y LOS MODIFICA
 def modificacionEducacion(id):
     nivel = input("INGRESAR NIVEL DE EDUDACION\n")
     titulo = input("TITULO QUE DESEA AGREGAR SEPARAR CON COMA , SI SON VARIAS\n").split(",")
@@ -523,8 +529,8 @@ def modificacionEducacion(id):
     proyeccion = {"$push":{"educacion.institucion":{"$each":instituciones}}}
     verificarActualizacion(collection.update_one(filtro,proyeccion),"MODIFICACION DE INSTITUCIONES\n")
 
+
 #MODIFICA LOS DATOS LABORALES DE UN CV ESPECIFICO
-    
 def modificarLaboral(id):
     print("DESEA AÑADIR TRABAJO O PASANTIA")
     print("1- TRABAJO\n")
@@ -539,7 +545,8 @@ def modificarLaboral(id):
             print("OPCION NO VALIDA\n")
     except ValueError:
             print("INGRESE UNA OPCION VALIDA\n")
-        
+
+
 #MODIFICA LOS DATOS LABORALES DE UN CV ESPECIFICO
 def modificarTrajo(id):
     print("DATOS DEL TRABAJO\n")
@@ -555,8 +562,8 @@ def modificarTrajo(id):
     proyeccion = {"$push":{"laboral.trabajos":documentoTrabajo}}
     verificarActualizacion(collection.update_one(filtro,proyeccion),"ACTUALIZACION TRABAJO")
 
+
 # REALIZA CAMBIOS EN LOS DATOS DE PASANTIA DE UN CV
-    
 def modificarPasantia(id):
     print("DATOS DE LA PASANTIA\n")
     duracion = input("DURACION\n")
@@ -571,8 +578,8 @@ def modificarPasantia(id):
     proyeccion = {"$push":{"laboral.pasantia":documentoPasantia}}
     verificarActualizacion(collection.update_one(filtro,proyeccion),"ACTUALIZACION PASANTIA")
 
-#DESPLIEGA EL MENU PARA MODIFICAR O AGREGAR UNA NUEVA HABILIDAD
 
+#DESPLIEGA EL MENU PARA MODIFICAR O AGREGAR UNA NUEVA HABILIDAD
 def modificacionHabilidades(id):
     print("AGREGAR O MODIFICAR UNA HABILIDAD\n")
     option = int(input("1- MODIFICAR HABILIDAD\n 2-AGREGAR HABILIDAD\n"))
@@ -590,28 +597,28 @@ def modificacionHabilidades(id):
     except ValueError:
             print("INGRESE UNA OPCION VALIDA\n")
 
-#AGREGA UNA NUEVA HABILIDAD INDICADA EN EL PARAMETRO EN UN CV ESPECIFICADO POR ID
 
+#AGREGA UNA NUEVA HABILIDAD INDICADA EN EL PARAMETRO EN UN CV ESPECIFICADO POR ID
 def agregarHabilidad(id,habilidad):
     filtro = {"_id" :id}
     operacion = {"$push": {"habilidades": habilidad}}
     verificarActualizacion(collection.update_one(filtro, operacion),"HABILIDAD AGREGADA")
 
-#SOLICITA AL USUARIO QUE INGRESE EL NOMBRE DE UNA NUEVA HABILIDAD
 
+#SOLICITA AL USUARIO QUE INGRESE EL NOMBRE DE UNA NUEVA HABILIDAD
 def pedirHabilidad():
     habilidad = input("INGRESE LA HABILIDAD\n")
     return habilidad
 
-# EJECUTA EL QUERY PARA MODIFICAR UNA HABILIDAD YA EXISTENTE
 
+# EJECUTA EL QUERY PARA MODIFICAR UNA HABILIDAD YA EXISTENTE
 def actualizarHabilidad(id,indice,habilidad):
     filtro = {"_id" :id,f"habilidades.{indice}": {"$exists": True}}
     operacion = {"$set": {f"habilidades.{indice}": habilidad}}
     verificarActualizacion(collection.update_one(filtro, operacion),"HABILIDAD MODIFICADO")
 
-# BUSCA UNA HABILIDAD ESPECIFICA Y RETORNA SU INDICE EN EL ARREGLO
 
+# BUSCA UNA HABILIDAD ESPECIFICA Y RETORNA SU INDICE EN EL ARREGLO
 def buscarIndiceHabilidad(id):
     filtro = {"_id":id}
     proyeccion = {"habilidades": 1,"_id":0}
@@ -633,7 +640,6 @@ def buscarIndiceHabilidad(id):
 
 
 # DESPLIEGA UN MENU EN PANTALLA QUE OFRECE MODIFICARO AGREGAR UNA NUEVA HABILIDAD
-    
 def modificarIntereses(id):
     print("AGREGAR O MODIFICAR UNA INTERES\n")
     option = int(input("1- MODIFICAR INTERES\n 2-AGREGAR INTERES\n"))
@@ -650,28 +656,28 @@ def modificarIntereses(id):
     except ValueError:
         print("INGRESE UNA OPCION VALIDA\n")
 
-#AGREGA UN NUEVO INTERES QUE RECIDIDO POR PARAMETRO EN LA FUNCION, Y ES AGREGADO EN UN CV ESPECIFICADO POR ID
 
+#AGREGA UN NUEVO INTERES QUE RECIDIDO POR PARAMETRO EN LA FUNCION, Y ES AGREGADO EN UN CV ESPECIFICADO POR ID
 def agregarInteres(id,interes):
     filtro = {"_id" :id}
     operacion = {"$push": {"intereses": interes}}
     verificarActualizacion(collection.update_one(filtro, operacion),"INTERES AGREGADO")
 
+
 # SOLICITA LOS INTERESES AL USUARIO Y LOS RETORNA
-    
 def pedirInteres():
     interes = input("INGRESE EL NUEVO INTERES\n")
     return interes
 
-# INGRESA EN LA BASE DE DATOS UNA ACTUALIZACION DE ALGUN INTERES
 
+# INGRESA EN LA BASE DE DATOS UNA ACTUALIZACION DE ALGUN INTERES
 def actualizarInteres(id,indice,interes):
     filtro = {"_id" :id,f"intereses.{indice}": {"$exists": True}}
     operacion = {"$set": {f"intereses.{indice}": interes}}
     verificarActualizacion(collection.update_one(filtro, operacion),"INTERES MODIFICADO")
 
-#BUSCA EL INDICE DE UN INTERES ESPECIFICO DENTRO DE UN ARREGLO Y RETORNA SU POSICION
 
+#BUSCA EL INDICE DE UN INTERES ESPECIFICO DENTRO DE UN ARREGLO Y RETORNA SU POSICION
 def buscarIndiceInteres(id):
     filtro = {"_id":id}
     proyeccion = {"intereses": 1,"_id":0}
@@ -691,8 +697,8 @@ def buscarIndiceInteres(id):
         iterador = iterador - 1
         return iterador
 
-#DESPLIEGA EN PANTALLA UN MENU QUE OFRECE LAS DIFENTES OPCIONES PARA MODIFICAR UN CV
 
+#DESPLIEGA EN PANTALLA UN MENU QUE OFRECE LAS DIFENTES OPCIONES PARA MODIFICAR UN CV
 def menuModificacion():
     while True:
         print("\n\t\tMENU PARA MODIFICACION DE DATOS DEL CV\n")
@@ -726,12 +732,67 @@ def menuModificacion():
         except ValueError:
             print("INGRESE UNA OPCION VALIDA\n")
 
-#MUESTRA UNA LISTA SIMPLE EN PANTALLA DE LOS NOMBRES DE CV Y SU RESUMEN CURRICULAR
 
+#MUESTRA UNA LISTA SIMPLE EN PANTALLA DE LOS NOMBRES DE CV Y SU RESUMEN CURRICULAR
 def mostrarLista():
     indice = buscarIndice()
     id = buscarId(indice)
     return id
+
+
+# Mostrar las habilidades de todos los CVs
+def imprimir_habilidades(collection):
+    print("\n== Habilidades de los Currículums ==")
+    
+    cursor = collection.find()
+
+    for curr in cursor:
+        print("\nCurrículum:")
+        print(f"ID: {curr['_id']}")
+        print(f"Nombre: {curr['datos_personales']['nombre']} {curr['datos_personales']['apellido']}")
+
+        # Utilizar get para manejar la posible falta de la clave 'habilidades'
+        habilidades = curr.get('habilidades', [])
+
+        # Imprimir las habilidades solo si están presentes
+        if habilidades:
+            print(f"Habilidades ({len(habilidades)}): {', '.join(habilidades)}")
+        else:
+            print("No hay habilidades registradas.")
+
+        print("\n-----------------------------")
+
+    print("Fin de la lista de currículums.\n")
+
+
+# Mostrar las habilidades por CV
+def imprimir_habilidades_por_id(collection):
+    cv_id = input("\nIngrese el ID del currículum a imprimir: ")
+
+    try:
+        cv_object_id = ObjectId(cv_id)
+        result = collection.find_one({"_id": cv_object_id})
+
+        if result:
+            print("\nCurrículum:")
+            print(f"ID: {result['_id']}")
+            print(f"Nombre: {result['datos_personales']['nombre']} {result['datos_personales']['apellido']}")
+
+            # Utilizar get para manejar la posible falta de la clave 'habilidades'
+            habilidades = result.get('habilidades', [])
+
+            # Imprimir las habilidades solo si están presentes
+            if habilidades:
+                print(f"Habilidades ({len(habilidades)}): {', '.join(habilidades)}")
+            else:
+                print("No hay habilidades registradas.")
+
+            print("\n-----------------------------")
+        else:
+            print(f"No se encontró ningún currículum con el ID: {cv_id}")
+    except (ValueError, bson.errors.InvalidId):
+        print("ID no válido. Por favor, ingrese un ID de currículum válido.")
+
 
 #Opciones del menú
 def show_menu():
@@ -744,13 +805,15 @@ def show_menu():
     print("5. Mostrar todos los CVs")
     print("6. Intereses más comunes")
     print("7. Herramientas manejadas por cada individuo")
-    print("8. Trabajos realizados")
-    print("9. Salir")
+    print("8. Herramientas manejadas por CV")
+    print("9. Trabajos realizados")
+    print("10. Salir")
     print("=========================")
 
 
 #Conexion con la BD
 collection = connect_to_mongodb()
+
 
 #Programa principal
 def main():
@@ -776,10 +839,12 @@ def main():
             elif opcion == 6:
                 print("opcion 1")
             elif opcion == 7:
-                print("opcion 1")
+                imprimir_habilidades(collection)
             elif opcion == 8:
-                print("opcion 1")
+                imprimir_habilidades_por_id(collection)
             elif opcion == 9:
+                print("opcion 1")
+            elif opcion == 10:
                 print("Saliendo del programa. ¡Hasta luego!")
                 break
             else:
