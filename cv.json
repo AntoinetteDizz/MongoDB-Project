@@ -1,190 +1,494 @@
 [
   {
-    "resumen": "Soy un apasionado por la programacion y la innovacion tecnologica. Con 3 anios de experiencia en el desarrollo de aplicaciones web y moviles. He liderado equipos en proyectos exitosos que han mejorado la eficiencia operativa en un 25%.",
+    "resumen": "Estudiante en busqueda de oportunidades.",
     "datos_personales": {
-      "nombre": "Isabella",
-      "apellido": "Gutierrez",
-      "direccion": {
-        "pais": "Colombia",
-        "estado": "Cundinamarca",
-        "ciudad": "Bogota",
-        "residencia": "Barrio El Dorado"
-      },
-      "telefono": ["3129876543"],
-      "email": "isabella.gutierrez@example.com",
-      "redes": {
-        "facebook": "Isabella Gutierrez",
-        "instagram": "@isabella.g",
-        "github": "isabella_dev"
-      }
+      "cedula": "98765432",
+      "nombre": "Rosangela",
+      "apellido": "Martinez"
     },
-    "educacion": {
-      "nivel": "Educacion Universitaria",
-      "titulo": ["Ingenieria de Sistemas"],
-      "institucion": ["Universidad Nacional de Colombia"]
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Jalisco",
+      "ciudad": "Guadalajara",
+      "residencia": "Calle Principal 456"
     },
-    "laboral": {
-      "pasantia": [
-        {
-          "duracion": "3 meses",
-          "lugar": "EmpresaXYZ",
-          "cargo": "Desarrollador Junior"
-        }
-      ],
-      "trabajos": [
-        {
-          "modalidad": "Tiempo completo",
-          "actividad": "Desarrollo de Aplicaciones Moviles",
-          "fecha": "10-02-2023"
-        }
-      ]
-    },
-    "habilidades": [
-      "Java",
-      "React",
-      "Swift",
-      "MongoDB",
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Git"
+    "telefono": [
+      "+52 33 1234-5678",
+      "+52 33 8765-4321",
+      "+52 33 9876-5432",
+      "+52 33 5432-8765"
     ],
-    "intereses": ["Innovacion tecnologica", "Desarrollo sostenible", "Viajes"]
-  },
-
-
-  {
-    "resumen": "Soy un entusiasta del diseno grafico y la creatividad visual. Con 4 anos de experiencia en el diseno de interfaces de usuario y experiencia de usuario para aplicaciones web y moviles. Mi enfoque es crear disenos intuitivos y atractivos que mejoren la experiencia del usuario.",
-    "datos_personales": {
-      "nombre": "Camila",
-      "apellido": "Hernandez",
-      "direccion": {
-        "pais": "Argentina",
-        "estado": "Buenos Aires",
-        "ciudad": "CABA",
-        "residencia": "Palermo"
-      },
-      "telefono": ["1156784321"],
-      "email": "camila.hernandez@example.com",
-      "redes": {
-        "facebook": "Camila Hernandez",
-        "instagram": "@camilah.design",
-        "github": "camilah_designer"
-      }
+    "email": "maria.g@example.com",
+    "redes": {
+      "facebook": "mariagonzalez",
+      "instagram": "mariag",
+      "github": "mariagon"
     },
     "educacion": {
-      "nivel": "Educacion Universitaria",
-      "titulo": ["Diseno Grafico"],
-      "institucion": ["Universidad de Buenos Aires"]
+      "nivel": "Tecnico",
+      "titulo": [
+        "Tecnico en Informatica",
+        "Curso de Desarrollo Frontend",
+        "Diploma en Programacion Java"
+      ],
+      "institucion": [
+        "Instituto Tecnologico de Guadalajara",
+        "Escuela de Desarrollo Web",
+        "Academia de Java"
+      ]
     },
     "laboral": {
       "pasantia": [
         {
           "duracion": "6 meses",
-          "lugar": "Estudio de Diseno XYZ",
-          "cargo": "Disenadora Junior"
+          "lugar": "Tech Solutions",
+          "cargo": "Asistente de Desarrollo"
+        },
+        {
+          "duracion": "3 meses",
+          "lugar": "Innovate Labs",
+          "cargo": "Analista de Datos"
+        },
+        {
+          "duracion": "4 meses",
+          "lugar": "CodeCrafters",
+          "cargo": "Pasante de QA"
         }
       ],
       "trabajos": [
         {
-          "modalidad": "Freelancer",
-          "actividad": "Diseno de Interfaces de Usuario",
-          "fecha": "15-05-2022"
+          "modalidad": "Tiempo Parcial",
+          "actividad": "Soporte Tecnico",
+          "fecha": "2022-2023"
+        },
+        {
+          "modalidad": "Freelance",
+          "actividad": "Diseno Grafico",
+          "fecha": "2021-2022"
+        },
+        {
+          "modalidad": "Practicas Profesionales",
+          "actividad": "Desarrollo de Aplicaciones",
+          "fecha": "2020-2021"
+        },
+        {
+          "modalidad": "Tiempo Completo",
+          "actividad": "Desarrollador de Software",
+          "fecha": "2023-2024"
         }
       ]
     },
     "habilidades": [
-      "Adobe Illustrator",
-      "Adobe Photoshop",
-      "Sketch",
-      "InVision",
-      "UI/UX Design",
-      "Prototipado"
+      "Desarrollo Frontend",
+      "Analisis de Datos",
+      "QA Testing"
     ],
-    "intereses": ["Diseno de Interfaces", "Arte digital", "Viajes"]
+    "intereses": [
+      "Inteligencia Artificial",
+      "Diseno de Experiencia de Usuario",
+      "Ciberseguridad",
+      "Desarrollo Sostenible"
+    ]
   },
-
-
   {
-    "resumen": "Soy un profesional en finanzas con 7 anos de experiencia en analisis de inversiones y gestion de carteras. He trabajado en entidades financieras reconocidas y he contribuido al crecimiento de los activos bajo gestion. Apasionado por el mercado de valores y las estrategias de inversion.",
+    "resumen": "Estudiante en busca de oportunidades.",
     "datos_personales": {
-      "nombre": "Luis",
-      "apellido": "Martinez",
-      "direccion": {
-        "pais": "Mexico",
-        "estado": "Ciudad de Mexico",
-        "ciudad": "Polanco",
-        "residencia": "Avenida Reforma"
-      },
-      "telefono": ["5523456789"],
-      "email": "luis.martinez@example.com",
-      "redes": {
-        "linkedin": "Luis Martinez",
-        "twitter": "@luisfinanzas",
-        "github": "luis_investor"
-      }
+      "cedula": "12345678",
+      "nombre": "Juan",
+      "apellido": "Perez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Jalisco",
+      "ciudad": "Guadalajara",
+      "residencia": "Calle Principal 123"
+    },
+    "telefono": [
+      "+52 33 1111-2222",
+      "+52 33 3333-4444",
+      "+52 33 5555-6666"
+    ],
+    "email": "juan.p@example.com",
+    "redes": {
+      "facebook": "juanperez",
+      "instagram": "juanp",
+      "github": "juanpg"
     },
     "educacion": {
-      "nivel": "Educacion Universitaria",
-      "titulo": ["Finanzas"],
-      "institucion": ["Universidad Nacional Autonoma de Mexico"]
+      "nivel": "Licenciatura",
+      "titulo": ["Licenciado en Informatica"],
+      "institucion": ["Universidad de Guadalajara"]
     },
     "laboral": {
-      "trabajos": [
-        {
-          "empresa": "Banco Internacional",
-          "cargo": "Analista de Inversiones",
-          "fecha": "01-08-2018 - Presente"
-        },
-        {
-          "empresa": "Fondo de Inversiones XYZ",
-          "cargo": "Gestor de Carteras",
-          "fecha": "15-03-2015 - 30-06-2018"
-        }
-      ]
+        "pasantia": [
+          {"duracion": "3 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "4 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "5 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Desarrollador de Software", "fecha": "2021-2022"},
+          {"modalidad": "Freelance", "actividad": "Diseno Grafico", "fecha": "2020-2021"}
+        ]
     },
-    "habilidades": ["Analisis financiero", "Gestion de carteras", "Mercado de valores", "Modelos financieros"]
+    "habilidades": ["Desarrollo Backend", "Diseno Grafico", "Manejo de Bases de Datos"],
+    "intereses": ["Inteligencia Artificial", "Diseno de Experiencia de Usuario", "Ciberseguridad"]
   },
-
-  
   {
-    "resumen": "Soy un ingeniero ambiental con experiencia en proyectos de sostenibilidad y gestion de recursos naturales. He trabajado en la implementacion de practicas eco-amigables en diversas industrias. Comprometido con la conservacion del medio ambiente y el desarrollo sostenible.",
+    "resumen": "Estudiante en busca de nuevas experiencias.",
     "datos_personales": {
+      "cedula": "87654321",
+      "nombre": "Ana",
+      "apellido": "Gonzalez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Jalisco",
+      "ciudad": "Zapopan",
+      "residencia": "Av. Principal 789"
+    },
+    "telefono": [
+      "+52 33 7777-8888",
+      "+52 33 9999-0000",
+      "+52 33 2222-3333"
+    ],
+    "email": "ana.g@example.com",
+    "redes": {
+      "facebook": "anagonzalez",
+      "instagram": "anag",
+      "github": "anag"
+    },
+    "educacion": {
+      "nivel": "Maestria",
+      "titulo": ["Maestria en Ciencias de la Computacion"],
+      "institucion": ["Instituto Tecnologico de Monterrey"]
+    },
+    "laboral": {
+        "pasantia": [
+          {"duracion": "4 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "5 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "6 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"},
+          {"duracion": "3 meses", "lugar": "Digital Innovations", "cargo": "Desarrollador Junior"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Desarrollador de Software", "fecha": "2020-2021"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Analista de Sistemas", "fecha": "2019-2020"},
+          {"modalidad": "Freelance", "actividad": "Diseno Web", "fecha": "2018-2019"}
+        ]
+    },
+    "habilidades": ["Desarrollo Full Stack", "Machine Learning", "Gestion de Proyectos"],
+    "intereses": ["Inteligencia Artificial", "Desarrollo de Aplicaciones Moviles", "Realidad Virtual"]
+  },
+  {
+    "resumen": "Estudiante en busca de desafios.",
+    "datos_personales": {
+      "cedula": "54321678",
+      "nombre": "Carlos",
+      "apellido": "Lopez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Nuevo Leon",
+      "ciudad": "Monterrey",
+      "residencia": "Calle Principal 987"
+    },
+    "telefono": [
+      "+52 81 1111-2222",
+      "+52 81 3333-4444",
+      "+52 81 5555-6666"
+    ],
+    "email": "carlos.l@example.com",
+    "redes": {
+      "facebook": "carloslopez",
+      "instagram": "carlosl",
+      "github": "carlosl"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Licenciado en Ingenieria Electronica"],
+      "institucion": ["Universidad Autonoma de Nuevo Leon"]
+    },
+    "laboral": {
+        "pasantia": [
+          {"duracion": "6 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "3 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Ingeniero de Sistemas", "fecha": "2019-2020"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Diseno de Circuitos", "fecha": "2018-2019"},
+          {"modalidad": "Freelance", "actividad": "Programacion Embedded", "fecha": "2017-2018"},
+          {"modalidad": "Tiempo Parcial", "actividad": "Soporte Tecnico", "fecha": "2016-2017"}
+        ]
+    },
+    "habilidades": ["Diseno de Circuitos", "Programacion en C", "Sistemas Embebidos"],
+    "intereses": ["Internet de las Cosas", "Automatizacion Industrial", "Ingenieria Biomedica"]
+  },
+  {
+    "resumen": "Estudiante en busca de retos emocionantes.",
+    "datos_personales": {
+      "cedula": "65432187",
       "nombre": "Laura",
-      "apellido": "Gonzalez",
-      "direccion": {
-        "pais": "Espana",
-        "region": "Cataluna",
-        "ciudad": "Barcelona",
-        "residencia": "Poble Sec"
-      },
-      "telefono": ["34987654321"],
-      "email": "laura.gonzalez@example.com",
-      "redes": {
-        "linkedin": "Laura Gonzalez",
-        "instagram": "@lauraeco",
-        "github": "laura_sostenible"
-      }
+      "apellido": "Rodriguez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Ciudad de Mexico",
+      "ciudad": "CDMX",
+      "residencia": "Av. Principal 456"
+    },
+    "telefono": [
+      "+52 55 1111-2222",
+      "+52 55 3333-4444",
+      "+52 55 5555-6666"
+    ],
+    "email": "laura.r@example.com",
+    "redes": {
+      "facebook": "laurarodriguez",
+      "instagram": "laurar",
+      "github": "laurar"
     },
     "educacion": {
-      "nivel": "Educacion Universitaria",
-      "titulo": ["Ingenieria Ambiental"],
-      "institucion": ["Universitat Politecnica de Catalunya"]
+      "nivel": "Tecnico",
+      "titulo": ["Tecnico en Electronica"],
+      "institucion": ["Colegio Nacional de Educacion Profesional Tecnica"]
     },
     "laboral": {
+        "pasantia": [
+          {"duracion": "4 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "5 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "3 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"},
+          {"duracion": "6 meses", "lugar": "Digital Innovations", "cargo": "Desarrollador Junior"},
+          {"duracion": "2 meses", "lugar": "SoftTech", "cargo": "Practicante de Desarrollo"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Desarrollador de Software", "fecha": "2021-2022"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Analista de Sistemas", "fecha": "2020-2021"},
+          {"modalidad": "Freelance", "actividad": "Diseno Web", "fecha": "2019-2020"},
+          {"modalidad": "Tiempo Parcial", "actividad": "Ingeniera de Hardware", "fecha": "2018-2019"},
+          {"modalidad": "Contrato Temporal", "actividad": "Soporte Tecnico", "fecha": "2017-2018"}
+        ]
+    },
+    "habilidades": ["Diseno de Circuitos", "Programacion en C++", "Electronica Analogica"],
+    "intereses": ["Innovacion Tecnologica", "Inteligencia Artificial", "Desarrollo de Dispositivos Medicos"]
+  },
+  {
+    "resumen": "Estudiante enfocado en ciberseguridad.",
+    "datos_personales": {
+      "cedula": "98701234",
+      "nombre": "Gabriela",
+      "apellido": "Fernandez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Puebla",
+      "ciudad": "Puebla",
+      "residencia": "Av. Principal 987"
+    },
+    "telefono": [
+      "+52 222 111-2222",
+      "+52 222 333-4444",
+      "+52 222 555-6666"
+    ],
+    "email": "gabriela.f@example.com",
+    "redes": {
+      "facebook": "gabrielaf",
+      "instagram": "gabrielaf",
+      "github": "gabrielaf"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Ingenieria en Ciberseguridad"],
+      "institucion": ["Benemerita Universidad Autonoma de Puebla"]
+    },
+    "laboral": {
+        "pasantia": [
+          {"duracion": "2 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "4 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "3 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"},
+          {"duracion": "5 meses", "lugar": "Digital Innovations", "cargo": "Desarrollador Junior"},
+          {"duracion": "6 meses", "lugar": "SoftTech", "cargo": "Practicante de Desarrollo"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Experto en Ciberseguridad", "fecha": "2021-2022"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Analista de Seguridad", "fecha": "2020-2021"}
+        ]
+    },
+    "habilidades": ["Analisis Forense", "Seguridad de Redes", "Ciberinteligencia"],
+    "intereses": ["Ciberseguridad Industrial", "Hacktivismo", "Proteccion de Datos"]
+  },
+  {
+    "resumen": "Estudiante con enfoque en desarrollo web.",
+    "datos_personales": {
+      "cedula": "34567890",
+      "nombre": "Valeria",
+      "apellido": "Hernandez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Nuevo Leon",
+      "ciudad": "San Nicolas de los Garza",
+      "residencia": "Av. Principal 456"
+    },
+    "telefono": [
+      "+52 81 7777-8888",
+      "+52 81 9999-0000",
+      "+52 81 2222-3333"
+    ],
+    "email": "valeria.h@example.com",
+    "redes": {
+      "facebook": "valeriahernandez",
+      "instagram": "valeriah",
+      "github": "valeriah"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Ingeniero en Tecnologias Computacionales"],
+      "institucion": ["Instituto Tecnologico y de Estudios Superiores de Monterrey"]
+    },
+    "laboral": {
+        "pasantia": [
+          {"duracion": "4 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "6 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "3 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Desarrollador Frontend", "fecha": "2020-2021"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Analista de Sistemas", "fecha": "2019-2020"},
+          {"modalidad": "Freelance", "actividad": "Diseno Web", "fecha": "2018-2019"},
+          {"modalidad": "Tiempo Parcial", "actividad": "Soporte Tecnico", "fecha": "2017-2018"}
+        ]
+    },
+    "habilidades": ["Desarrollo Web", "UX/UI Design", "Base de Datos"],
+    "intereses": ["Tecnologias Web Emergentes", "Diseno de Experiencia de Usuario", "Seguridad Informatica"]
+  },
+  {
+    "resumen": "Estudiante apasionado por la tecnologia.",
+    "datos_personales": {
+      "cedula": "10987654",
+      "nombre": "Ricardo",
+      "apellido": "Sanchez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Nuevo Leon",
+      "ciEstadoudad": "Monterrey",
+      "residencia": "Av. Principal 789"
+    },
+    "telefono": [
+      "+52 81 7777-8888",
+      "+52 81 9999-0000",
+      "+52 81 2222-3333"
+    ],
+    "email": "ricardo.s@example.com",
+    "redes": {
+      "facebook": "ricardosanchez",
+      "instagram": "ricardos",
+      "github": "ricardos"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Ingeniero en Sistemas Computacionales"],
+      "institucion": ["Universidad Autonoma de Nuevo Leon"]
+    },
+    "laboral": {
+        "pasantia": [
+          {"duracion": "3 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+          {"duracion": "5 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+          {"duracion": "4 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"}
+        ],
+        "trabajos": [
+          {"modalidad": "Tiempo Completo", "actividad": "Desarrollador de Software", "fecha": "2021-2022"},
+          {"modalidad": "Practicas Profesionales", "actividad": "Analista de Sistemas", "fecha": "2020-2021"},
+          {"modalidad": "Freelance", "actividad": "Diseno Web", "fecha": "2019-2020"},
+          {"modalidad": "Tiempo Parcial", "actividad": "Soporte Tecnico", "fecha": "2018-2019"}
+        ]
+    },
+    "habilidades": ["Desarrollo de Software", "Analisis de Sistemas", "Gestion de Proyectos"],
+    "intereses": ["Inteligencia Artificial", "Desarrollo de Aplicaciones Moviles", "Tecnologias Emergentes"]
+  },
+  {
+    "resumen": "Estudiante interesado en desarrollo movil.",
+    "datos_personales": {
+      "cedula": "12340123",
+      "nombre": "Eduardo",
+      "apellido": "Gonzalez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Sonora",
+      "ciudad": "Hermosillo",
+      "residencia": "Calle Principal 654"
+    },
+    "telefono": [
+      "+52 662 111-2222",
+      "+52 662 333-4444",
+      "+52 662 555-6666"
+    ],
+    "email": "eduardo.g@example.com",
+    "redes": {
+      "facebook": "eduardog",
+      "instagram": "eduardog",
+      "github": "eduardog"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Ingenieria en Desarrollo de Software"],
+      "institucion": ["Universidad de Sonora"]
+    },
+    "laboral": {
+      "pasantia": [
+        {"duracion": "4 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+        {"duracion": "3 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"}
+      ],
       "trabajos": [
-        {
-          "empresa": "Consultora Ambiental XYZ",
-          "cargo": "Ingeniera Ambiental",
-          "fecha": "10-05-2017 - Presente"
-        },
-        {
-          "empresa": "Proyectos Sostenibles S.A.",
-          "cargo": "Coordinadora de Proyectos",
-          "fecha": "01-02-2015 - 05-05-2017"
-        }
+        {"modalidad": "Tiempo Completo", "actividad": "Desarrollador Movil", "fecha": "2019-2020"},
+        {"modalidad": "Practicas Profesionales", "actividad": "Analista de Sistemas", "fecha": "2018-2019"}
       ]
     },
-    "habilidades": ["Gestion ambiental", "Evaluacion de impacto ambiental", "Desarrollo sostenible", "Educacion ambiental"]
-  }
+    "habilidades": ["Desarrollo Android", "iOS App Development", "UI/UX Design"],
+    "intereses": ["Innovacion en Aplicaciones Moviles", "Inteligencia Artificial en Dispositivos Moviles"]
+  },
+  {
+    "resumen": "Estudiante con enfoque en analisis de datos.",
+    "datos_personales": {
+      "cedula": "01234567",
+      "nombre": "Diego",
+      "apellido": "Ramirez"
+    },
+    "direccion": {
+      "pais": "Mexico",
+      "estado": "Guanajuato",
+      "ciudad": "Leon",
+      "residencia": "Av. Principal 567"
+    },
+    "telefono": [
+      "+52 477 111-2222",
+      "+52 477 333-4444",
+      "+52 477 555-6666"
+    ],
+    "email": "diego.r@example.com",
+    "redes": {
+      "facebook": "diegoramirez",
+      "instagram": "diegor",
+      "github": "diegor"
+    },
+    "educacion": {
+      "nivel": "Licenciatura",
+      "titulo": ["Ingenieria en Ciencias de Datos"],
+      "institucion": ["Universidad de Guanajuato"]
+    },
+    "laboral": {
+      "pasantia": [
+        {"duracion": "6 meses", "lugar": "Tech Solutions", "cargo": "Asistente de Desarrollo"},
+        {"duracion": "4 meses", "lugar": "Innovate Labs", "cargo": "Analista de Datos"},
+        {"duracion": "5 meses", "lugar": "CodeCrafters", "cargo": "Pasante de QA"}
+      ],
+      "trabajos": [
+        {"modalidad": "Tiempo Completo", "actividad": "Analista de Datos", "fecha": "2021-2022"},
+        {"modalidad": "Practicas Profesionales", "actividad": "Desarrollador de Software", "fecha": "2020-2021"},
+        {"modalidad": "Freelance", "actividad": "Analista Estadistico", "fecha": "2019-2020"}
+      ]
+    },
+    "habilidades": ["Analisis de Datos", "Machine Learning", "Programacion Estadistica"],
+    "intereses": ["Visualizacion de Datos", "Big Data", "Inteligencia Artificial en la Empresa"]
+  }  
 ]

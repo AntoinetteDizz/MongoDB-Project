@@ -2,111 +2,49 @@ from pymongo import MongoClient
 import json
 from bson import ObjectId
 import bson.errors
-import time 
+import time
 
 
-# Datos de conexión a MongoDB
-MONGO_URI = 'mongodb://localhost:27017/'
+#----------------------------------------Datos de conexión a MongoDB Atlas
+MONGO_USERNAME = ''  # Cambiar por el usuario creado en Mongodb Atlas 
+MONGO_PASSWORD = ''       # Cambiar por la contraseña de el usuario creado
+MONGO_CLUSTER_ADDRESS = 'proyectocurriculumsdb.o0yltik.mongodb.net'
+MONGO_URI = f'mongodb+srv://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_CLUSTER_ADDRESS}/cv?retryWrites=true&w=majority'
 DB_NAME = 'cv'
 COLLECTION_NAME = 'curriculums'
+#----------------------------------------Datos de conexión a MongoDB Atlas
 
 
-#Conexión de BD
+#----------------------------------------Conexión de Base de Datos
 def connect_to_mongodb():
     client = MongoClient(MONGO_URI)
     db = client[DB_NAME]
     collection = db[COLLECTION_NAME]
     return collection
+#----------------------------------------Conexión de Base de Datos
 
 
-#Insertar curriculums a la BD
+#----------------------------------------Insertar CVs a la Base de Datos
 def insert_data(collection):
-    # Verificar si ya se han insertado datos
-    if collection.count_documents({}) == 0:
-        with open('cv.json', 'r') as file:
-            curriculums_data = json.load(file)
-        result = collection.insert_many(curriculums_data)
-        print(f"Se insertaron {len(result.inserted_ids)} documentos en la base de datos.")
-    else:
-        print("Los datos ya han sido insertados anteriormente.")
+    # Cargar datos existentes desde la base de datos
+    existing_data = collection.find({}, {"datos_personales.cedula": 1, "_id": 0})
+    existing_cedulas = set(cv["datos_personales"]["cedula"] for cv in existing_data)
 
+    # Leer los currículums desde el archivo JSON
+    with open('cv.json', 'r') as file:
+        curriculums_data = json.load(file)
 
-# Buscar CV por ID
-def buscar_cv_por_id(collection):
-    cv_id = input("Ingrese el ID del currículum a buscar: ").strip()
+    # Filtrar los currículums que no están en la base de datos por cédula
+    new_curriculums = [cv for cv in curriculums_data if "datos_personales" in cv and "cedula" in cv["datos_personales"] and cv["datos_personales"]["cedula"] not in existing_cedulas]
 
-    try:
-        cv_object_id = ObjectId(cv_id)
-        result = collection.find_one({"_id": cv_object_id})
+    # Insertar los currículums filtrados en la base de datos
+    if new_curriculums:
+        collection.insert_many(new_curriculums)
+#----------------------------------------Insertar CVs a la Base de Datos
+        
 
-        if result:
-            print("\nCurrículum encontrado:")
-            print(f"ID: {result['_id']}")
-            print(f"Nombre: {result['datos_personales']['nombre']} {result['datos_personales']['apellido']}")
-            
-            # Utilizar get para manejar la posible falta de la clave 'direccion'
-            direccion = result['datos_personales'].get('direccion', {})
-            pais = direccion.get('pais', 'No disponible')
-            estado = direccion.get('estado', 'No disponible')
-            ciudad = direccion.get('ciudad', 'No disponible')
-            
-            print(f"Dirección: {pais}, {estado}, {ciudad}")
-            
-            # Utilizar get para manejar la posible falta de la clave 'telefono'
-            telefonos = result['datos_personales'].get('telefono', [])
-            print(f"Teléfono: {', '.join(telefonos) if telefonos else 'No disponible'}")
-            
-            # Utilizar get para manejar la posible falta de la clave 'email'
-            email = result['datos_personales'].get('email', 'No disponible')
-            print(f"Email: {email}")
-            
-            # Manejar la posible falta de la clave 'redes' en 'datos_personales'
-            redes_sociales = result['datos_personales'].get('redes', {})
-            
-            print(f"Redes Sociales: Facebook - {redes_sociales.get('facebook', 'No disponible')}, "
-                  f"Instagram - {redes_sociales.get('instagram', 'No disponible')}, "
-                  f"GitHub - {redes_sociales.get('github', 'No disponible')}")
-            
-            print("\nEducación:")
-            print(f"Nivel: {result['educacion']['nivel']}")
-            print(f"Título: {', '.join(result['educacion']['titulo'])}")
-            print(f"Institución: {', '.join(result['educacion']['institucion'])}")
-            print("\nHabilidades:")
-            
-            # Utilizar get para manejar la posible falta de la clave 'habilidades'
-            habilidades = result.get('habilidades', [])
-            print(', '.join(habilidades))
-            
-            print("\nIntereses:")
-            
-            # Utilizar get para manejar la posible falta de la clave 'intereses'
-            intereses = result.get('intereses', [])
-            print(', '.join(intereses))
-        else:
-            print(f"No se encontró ningún currículum con el ID: {cv_id}")
-    except (ValueError, bson.errors.InvalidId):
-        print("ID no válido. Por favor, ingrese un ID de currículum válido.")
-
-
-
-#Eliminar CV por ID 
-def eliminar_cv_por_id(collection):
-    cv_id = input("\nIngrese el ID del currículum a eliminar: ")
-
-    try:
-        cv_object_id = ObjectId(cv_id)
-        result = collection.delete_one({"_id": cv_object_id})
-
-        if result.deleted_count > 0:
-            print(f"Se eliminó correctamente el currículum con ID: {cv_id}")
-        else:
-            print(f"No se encontró ningún currículum con el ID: {cv_id}")
-    except (ValueError, bson.errors.InvalidId):
-        print("ID no válido. Por favor, ingrese un ID de currículum válido.")
-
-
-#Imprimir todos los CVs
-def mostrar_todos_cv(collection):
+#----------------------------------------Imprimir todos los Cvs existentes en la Base de Datos
+def imprimir_todos_los_cv(collection):
     print("\n== Todos los Currículums ==")
     
     cursor = collection.find()
@@ -114,64 +52,75 @@ def mostrar_todos_cv(collection):
     for curr in cursor:
         print("\nCurrículum:")
         print(f"ID: {curr['_id']}")
-        print(f"Nombre: {curr['datos_personales']['nombre']} {curr['datos_personales']['apellido']}")
         
-        # Utilizar get para manejar la posible falta de la clave 'telefono'
-        telefonos = curr['datos_personales'].get('telefono', [])
-        print(f"Teléfono: {', '.join(telefonos) if telefonos else 'No disponible'}")
-        
-        # Utilizar get para manejar la posible falta de la clave 'email'
-        email = curr['datos_personales'].get('email', 'No disponible')
-        print(f"Email: {email}")
-        
-        # Manejar el caso en que no exista la clave 'redes' en el documento
-        redes_sociales = curr['datos_personales'].get('redes', {})
-        
-        print(f"Redes Sociales: Facebook - {redes_sociales.get('facebook', 'No disponible')}, "
-              f"Instagram - {redes_sociales.get('instagram', 'No disponible')}, "
-              f"GitHub - {redes_sociales.get('github', 'No disponible')}")
-        
-        print("\nEducación:")
-        print(f"Nivel: {curr['educacion']['nivel']}")
-        print(f"Título: {', '.join(curr['educacion']['titulo'])}")
-        print(f"Institución: {', '.join(curr['educacion']['institucion'])}")
-        print("\nHabilidades:")
-        
-        # Utilizar get para manejar la posible falta de la clave 'habilidades'
-        habilidades = curr.get('habilidades', [])
-        print(', '.join(habilidades))
-        
-        print("\nIntereses:")
-        
-        # Utilizar get para manejar la posible falta de la clave 'intereses'
-        intereses = curr.get('intereses', [])
-        print(', '.join(intereses))
+        # Imprimir todos los campos del currículum
+        print("Resumen:", curr.get("resumen"))
+
+        datos_personales = curr.get("datos_personales", {})
+        print("Datos Personales:")
+        print(f"  Cedula: {datos_personales.get('cedula')}")
+        print(f"  Nombre: {datos_personales.get('nombre')}")
+        print(f"  Apellido: {datos_personales.get('apellido')}")
+
+        direccion = curr.get("direccion", {})
+        print("Direccion:")
+        print(f"  Pais: {direccion.get('pais')}")
+        print(f"  Estado: {direccion.get('estado')}")
+        print(f"  Ciudad: {direccion.get('ciudad')}")
+        print(f"  Residencia: {direccion.get('residencia')}")
+
+        print("Telefono:", curr.get("telefono", []))
+        print("Email:", curr.get("email"))
+
+        redes = curr.get("redes", {})
+        print("Redes:")
+        print(f"  Facebook: {redes.get('facebook')}")
+        print(f"  Instagram: {redes.get('instagram')}")
+        print(f"  Github: {redes.get('github')}")
+
+        educacion = curr.get("educacion", {})
+        print("Educacion:")
+        print(f"  Nivel: {educacion.get('nivel')}")
+        print(f"  Titulos: {', '.join(educacion.get('titulo', []))}")
+        print(f"  Instituciones: {', '.join(educacion.get('institucion', []))}")
+
+        laboral = curr.get("laboral", {})
+        print("Laboral:")
+        print("  Pasantias:")
+        for pasantia in laboral.get("pasantia", []):
+            print(f"    Duracion: {pasantia.get('duracion')}, Lugar: {pasantia.get('lugar')}, Cargo: {pasantia.get('cargo')}")
+
+        print("  Trabajos:")
+        for trabajo in laboral.get("trabajos", []):
+            print(f"    Modalidad: {trabajo.get('modalidad')}, Actividad: {trabajo.get('actividad')}, Fecha: {trabajo.get('fecha')}")
+
+        print("Habilidades:", ', '.join(curr.get("habilidades", [])))
+        print("Intereses:", ', '.join(curr.get("intereses", [])))
+
         print("\n-----------------------------")
 
     print("Fin de la lista de currículums.\n")
-
-    
-# FUNCION QUE SE ENCARGA DE VERIFICAR SI LA INSERCION FUE EXITOSA 
-def verificarInsercion(resultado):
-    if resultado.acknowledged:
-        print("INSERCION EXITOSA, BAJO EL ID : ",resultado.inserted_id,"\n")
-        time.sleep(5)
-        return True
-    else:
-        print("LA INSERCION NO FUE EXITOSA \n")
-        time.sleep(3)
-        return False
+#----------------------------------------Imprimir todos los Cvs existentes en la Base de Datos
 
 
-# INGRESA UN DOCUMENTO A LA BASE DE DATOS
-def ingresarCV(documento):
-    # INSERTA EN LA BD LOS DATOS PREPARADOS CON LA INFORMACION REGISTRADA POR EL USUARIO
-    resultado = collection.insert_one(documento)
-    verificarInsercion(resultado)
-
-
-# Solicitar datos del CV
+#----------------------------------------Solicitar datos del CV
 def solicitarDatosCV():
+
+    try:
+        with open("cv.json", "r") as archivo:
+            cvs_existentes = json.load(archivo)
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        cvs_existentes = []
+
+    # Solicitar la cédula
+    cedula = input("CEDULA\n")
+
+    # Verificar si la cédula ya existe
+    for cv in cvs_existentes:
+        if "datos_personales" in cv and "cedula" in cv["datos_personales"] and cv["datos_personales"]["cedula"] == cedula:
+            print("Error: Esta cédula ya existe. No se puede guardar el CV.")
+            return
+
     resumen = input("RESUMEN CURRICULAR\n")
     nombre = input("NOMBRE\n")
     apellido = input("APELLIDO\n")
@@ -232,6 +181,7 @@ def solicitarDatosCV():
     documento = {}
     documento["resumen"] = resumen
     documento["datos_personales"] = {}
+    documento["datos_personales"]["cedula"] = cedula
     documento["datos_personales"]["nombre"] = nombre
     documento["datos_personales"]["apellido"] = apellido
     documento["direccion"] = {}
@@ -254,547 +204,400 @@ def solicitarDatosCV():
 
     documento["laboral"] = {}
     documento["laboral"]["pasantia"] = pasantia
-    documento["laboral"]["pasantia"] = trabajos
+    documento["laboral"]["trabajos"] = trabajos
 
     documento["habilidades"] = habilidades
     documento["intereses"] = intereses
 
-    ingresarCV(documento)
+    # Agregar el nuevo CV a la lista de CV existentes
+    cvs_existentes.append(documento)
+
+    # Guardar todos los CV en el archivo
+    with open("cv.json", "w") as archivo:
+        json.dump(cvs_existentes, archivo, indent=2)
+#----------------------------------------Solicitar datos del CV
 
 
-
-#FUNCIONES PARA REALIZAR MODIFICACIONES EN LOS DATOS DE LOS CV
-
-
-# VERIFICA SI LA INSERCION DE UN DOCUMENTO FUE EXITOSA O NO
-def verificarInsercion(resultado):
-    if resultado.acknowledged:
-        print("INSERCION EXITOSA, BAJO EL ID : ",resultado.inserted_id,"\n")
-        return True
-    else:
-        print("LA INSERCION NO FUE EXITOSA \n")
-        return False
-
-
-#MUESTRA EN PANTALLA NOMBRE Y RESUMEN DE CV DE CADA PERSONA
-def mostrarNombresResumen():
-    results = collection.find()
-    for indice, variable in enumerate(results):
-        resumen = variable["resumen"]
-        nombre = variable["datos_personales"]["nombre"]
-        apellido = variable["datos_personales"]["apellido"]
-        print("---------------------------------------------------------------------------------------------------------------------------------------------")
-        print("\t {}-NOMBRE : {} {} ".format(indice+1,nombre,apellido))
-        print("RESUMEN CURRICULAR {} ".format(resumen))
-    
-    print("---------------------------------------------------------------------------------------------------------------------------------------------")
-
-
-#BUSCA UN ID DE DATO A INDICE INDICADO POR PARAMETRO
-def buscarId(indice):
-    results = collection.find()
-    id = ""
-    for iterador, variable in enumerate(results):
-        if indice == iterador:
-            id = variable["_id"]
-    if id == "":
-        print(" NO SE ENCONTRO EL ID DEL INDICE {} \n".format(indice))
-    else:
-        return id
-
-
-#DEVUELVE EL INDICE QUE EL USUARIO HAYA MARCADO
-def buscarIndice():
-    results = collection.find()
-    id = False
-    for indice, variable in enumerate(results):
-        resumen = variable["resumen"]
-        nombre = variable["datos_personales"]["nombre"]
-        apellido = variable["datos_personales"]["apellido"]
-        print("---------------------------------------------------------------------------------------------------------------------------------------------")
-        print("\t {}-NOMBRE : {} {} ".format(indice+1,nombre,apellido))
-        print("RESUMEN CURRICULAR {} ".format(resumen))
-    
-    print("---------------------------------------------------------------------------------------------------------------------------------------------")
-    indice = int(input("\tCUAL CURRICULUM DESEA MODIFICAR \n"))
-    indice = indice - 1
-
-    return indice    
-
-
-#SOLICITA LOS DATOS PERSONALES QUE SERA MODIFICADOS
-def modificacionDeDatosPersonales(id):
-    result = collection.find_one({"_id":id})
-
-    nombre = pedirNombre()
-    modificarNombre(id,nombre)
-    apellido = pedirApellido()
-    modificarApellido(id,apellido)
-
-    documentoDireccion = pedirDatosDireccion()
-    modificarDireccion(id,documentoDireccion)
-
-    print("MODIFICACION DE TELEFONO \n")
-    print("1 MODIFICACION DE TELEFONO \n")
-    print("2 AGREGAR UN NUEVO TELEFONO \n")
-    option = int(input())
+#----------------------------------------Eliminar CV por cédula
+def eliminar_cv_por_cedula(collection):
+    cedula_a_eliminar = input("\nIngrese la cédula del currículum a eliminar: ")
 
     try:
-        if option == 1:
-            indice = buscarIndiceTelefono(id)
-            nuevoTelefono = pedirTelefono()
-            modificarTelefono(id,indice,nuevoTelefono)
-        if option == 2:
-            nuevoTelefono = input("INGRESE EL NUMERO A AGREGAR\n")
-            agregarTelefono(id,nuevoTelefono)
-    except ValueError:
-        print("INGRESE UNA OPCION VALIDA\n")
+        with open("cv.json", "r") as archivo:
+            cvs_existentes = json.load(archivo)
 
-    email = pedirEmail()
-    modificarEmail(id,email)
+        # Verificar si la cédula existe y eliminar el currículum correspondiente
+        nuevo_json = []
+        eliminado = False
+        for cv in cvs_existentes:
+            if "datos_personales" in cv and "cedula" in cv["datos_personales"] and cv["datos_personales"]["cedula"] == cedula_a_eliminar:
+                print(f"Se eliminó correctamente el currículum con cédula {cedula_a_eliminar}")
+                eliminado = True
+            else:
+                nuevo_json.append(cv)
 
-    documentoRedes = pedirRedes()
-    modificarRedes(id,documentoRedes)
+        if not eliminado:
+            print(f"No se encontró ningún currículum con la cédula {cedula_a_eliminar}")
 
+        # Guardar los currículums restantes en el archivo
+        with open("cv.json", "w") as archivo:
+            json.dump(nuevo_json, archivo, indent=2)
 
-#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE REDES EN LOS CV
-def modificarRedes(id,redes):
-    filtro = {"_id":id}
-    operacion = {"$set":{"datos_personales.redes": redes}}
-    resultado = collection.update_one(filtro,operacion)
-    verificarActualizacion(resultado,"MODIFICACION DE REDES")
-
-
-#EJECUTA EL QUERY PARA REALIZAR LOS CAMBIOS DE EMAIL EN LOS CV
-def modificarEmail(id,nuevoEmail):
-    filtro = {"_id":id}
-    modificacion = {"$set":{"datos_personales.email":nuevoEmail}}
-    resultado = collection.update_one(filtro,modificacion)
-    verificarActualizacion(resultado,"MODIFICACION DE EMAIL")
-
-
-#SOLICITA LAS REDES PARA INGRESARLAS EN LA BD
-def pedirRedes():
-    facebook = input("INGRESAR USUARIO FACEBOOK\n")
-    instagram = input("INGRESAR USUARIO INSTAGRAM\n")
-    github = input("INGRESAR USUARIO GITHUB\n")
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        print("Error al leer el archivo de currículums.")
     
-    documentoRedes = {
-        "facebook":facebook,
-        "instagram":instagram,
-        "github":github
-    }
-    return documentoRedes
+    # Eliminar curriculums de la Base de Datos
+    collection.delete_many({})
+#----------------------------------------Eliminar CV por cédula
 
 
-#SOLICITA EL EMAIL POR PATALLA Y LO RETORNA
-def pedirEmail():
-    email = input("INGRESE EL NUEVO EMAIL\n")
-    return email
+#----------------------------------------Imprimir un CV por cedula
+def imprimir_curriculum_por_cedula(collection):
+    cedula_a_buscar = input("\nIngrese la cédula del currículum a imprimir: ")
 
+    # Buscar el currículum con la cédula especificada
+    curr = collection.find_one({"datos_personales.cedula": cedula_a_buscar})
 
-#MODIFICA UN TELFONO YA EXISTENTE DENTRO DE LA BD
-def modificarTelefono(id,indice,telefono):
-    filtro = {"_id" :id,f"datos_personales.telefono.{indice}": {"$exists": True}}
-    operacion = {"$set": {f"datos_personales.telefono.{indice}": telefono}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"TELFONO MODIFICADO")
+    if curr:
+        print("\nCurrículum:")
+        print(f"ID: {curr['_id']}")
 
+        # Imprimir todos los campos del currículum
+        print("Resumen:", curr.get("resumen"))
 
-#AGREGA UN NUEVO TELEFONO A LA COLECCION 
-def agregarTelefono(id,telefono):
-    filtro = {"_id" :id}
-    operacion = {"$push": {"datos_personales.telefono": telefono}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"TELEFONO AGREGADO")
+        datos_personales = curr.get("datos_personales", {})
+        print("Datos Personales:")
+        print(f"  Cedula: {datos_personales.get('cedula')}")
+        print(f"  Nombre: {datos_personales.get('nombre')}")
+        print(f"  Apellido: {datos_personales.get('apellido')}")
 
+        direccion = curr.get("direccion", {})
+        print("Direccion:")
+        print(f"  Pais: {direccion.get('pais')}")
+        print(f"  Estado: {direccion.get('estado')}")
+        print(f"  Ciudad: {direccion.get('ciudad')}")
+        print(f"  Residencia: {direccion.get('residencia')}")
 
-#SOLICITA POR PANTALLA AL USUARIO QUE INGRESE EL NUEVO TELEFONO
-def pedirTelefono():
-    telefono = input("INGRESE EL NUEVO TELEFONO\n")
-    return telefono
+        print("Telefono:", curr.get("telefono", []))
+        print("Email:", curr.get("email"))
 
+        redes = curr.get("redes", {})
+        print("Redes:")
+        print(f"  Facebook: {redes.get('facebook')}")
+        print(f"  Instagram: {redes.get('instagram')}")
+        print(f"  Github: {redes.get('github')}")
 
-#BUSCA UN INDICE ESPECIFICO DENTRO DEL ARRAY QUE ALMACENA LOS TELEFONOS EN LA BD
-def buscarIndiceTelefono(id):
-    filtro = {"_id":id}
-    proyeccion = {"datos_personales.telefono": 1,"_id":0}
-    result = collection.find_one(filtro,proyeccion)
+        educacion = curr.get("educacion", {})
+        print("Educacion:")
+        print(f"  Nivel: {educacion.get('nivel')}")
+        print(f"  Titulos: {', '.join(educacion.get('titulo', []))}")
+        print(f"  Instituciones: {', '.join(educacion.get('institucion', []))}")
 
-    variable = result["datos_personales"]["telefono"]
+        laboral = curr.get("laboral", {})
+        print("Laboral:")
+        print("  Pasantias:")
+        for pasantia in laboral.get("pasantia", []):
+            print(f"    Duracion: {pasantia.get('duracion')}, Lugar: {pasantia.get('lugar')}, Cargo: {pasantia.get('cargo')}")
 
-    print("TELEFONOS REGISTRADOS \n")
-    for iterador, telefono in enumerate(variable):
-        print("{} - TELEFONO : {}".format(iterador+1,telefono))
+        print("  Trabajos:")
+        for trabajo in laboral.get("trabajos", []):
+            print(f"    Modalidad: {trabajo.get('modalidad')}, Actividad: {trabajo.get('actividad')}, Fecha: {trabajo.get('fecha')}")
 
-    iterador = int(input("CUAL TELEFONO DESEA MODIFICAR \n"))
+        print("Habilidades:", ', '.join(curr.get("habilidades", [])))
+        print("Intereses:", ', '.join(curr.get("intereses", [])))
 
-    if iterador < 0 or iterador > len(variable):
-        print("ERROR NO SE ENCUENTRA ESE NUMERO\n")
-        time.sleep(3)
+        print("\n-----------------------------")
     else:
-        iterador = iterador - 1
-        return iterador
+        print(f"No se encontró ningún currículum con la cédula {cedula_a_buscar}.")
+#----------------------------------------Imprimir un CV por cedula
+        
+
+#----------------------------------------Funciones para modificar CV
+
+#-----------------------------Modificar resumen en el Json
+def modificar_resumen(curriculum):
+    nuevo_resumen = input("\nIngrese el nuevo resumen: ")
+    curriculum["resumen"] = nuevo_resumen
+    print("Resumen modificado correctamente.")
+#-----------------------------Modificar resumen en el Json
 
 
-#SOLICITA EL APELLIDO PARA SER MODIFICADO EN LA BD
-def pedirApellido():
-    apellido = input("NUEVO NOMBRE PARA EL CV - ESCRIBIR M o m PARA MANTENER EL ANTERIOR\n")
-    return apellido
+#-----------------------------Modificar Datos Personales en el Json
+def modificar_datos_personales(curriculum):
+    nuevo_nombre = input("\nIngrese el nuevo nombre: ")
+    nuevo_apellido = input("Ingrese el nuevo apellido: ")
+
+    # Actualizar los datos personales
+    curriculum['datos_personales']['nombre'] = nuevo_nombre
+    curriculum['datos_personales']['apellido'] = nuevo_apellido
+
+    print("Datos personales modificados correctamente.")
+#-----------------------------Modificar Datos Personales en el Json
 
 
-#SOLICITA EL NOMBRE PARA SER MODIFICADO EN LA BD
-def pedirNombre():
-    nombre = input("NUEVO NOMBRE PARA EL CV - ESCRIBIR M o m PARA MANTENER EL ANTERIOR\n")
-    return nombre
+#-----------------------------Modificar email en el Json
+def modificar_email(curriculum):
+    
+    nuevo_email = input("Ingrese el nuevo email: ")
+
+    # Actualizar email
+    curriculum["email"] = nuevo_email
+
+    print("Email modificado correctamente.")
+#-----------------------------Modificar email en el Json
 
 
-#SOLICITA EL DATOS DE DIRECCION PARA SER MODIFICADO EN LA BD
-def pedirDatosDireccion():
-    print("MODIFCAR DATOS DE DIRECCION\n")
-    pais = input("PAIS\n")
-    estado = input("estado\n")
-    ciudad = input("ciudad\n")
-    residencia = input("residencia\n")
+#-----------------------------Modificar telefono en el Json
+def modificar_telefono(curriculum):
+    
+    nuevo_telefono = input("\nIngrese el nuevo telefono: ")
+    
+    # Actualizar telefono
+    curriculum["telefono"] = nuevo_telefono
 
-    documentoDireccion = {
-        "pais": pais,
-        "estado":estado,
-        "ciudad": ciudad,
-        "residencia": residencia
-    }
-    return documentoDireccion
+    print("Telefono modificadoo correctamente.")
+#-----------------------------Modificar telefono en el Json
 
 
-#EJECUTA EL QUERY PARA MODIFICAR UN NOMBRE DE UN CV
-def modificarNombre(id,nuevoNombre):
-    if nuevoNombre == "m" or nuevoNombre == "M":
-        return
-    else:
-        filtro = {"_id":id}
-        modificacion = {"$set":{"datos_personales.nombre":nuevoNombre}}
-        collection.update_one(filtro,modificacion)
+#-----------------------------Modificar redes en el Json
+def modificar_redes(curriculum):
+
+    facebook = input("\nIngrese el nuevo Facebook: ")
+    instagram = input("Ingrese el nuevo Instagram: ")
+    github = input("Ingrese el nuevo GitHub: ")
+
+    # Actualizar las redes sociales
+    curriculum["redes"]["facebook"] = facebook
+    curriculum["redes"]["instagram"] = instagram
+    curriculum["redes"]["github"] = github
+
+    print("Redes modificadas correctamente.")
+#-----------------------------Modificar redes en el Json
 
 
-#EJECUTA EL QUERY PARA MODIFICAR UN APELLIDO DE UN CV
-def modificarApellido(id,nuevoApellido):
-    if nuevoApellido == "m" or nuevoApellido == "M":
-        return
-    else:
-        filtro = {"_id":id}
-        modificacion = {"$set":{"datos_personales.apellido":nuevoApellido}}
-        collection.update_one(filtro,modificacion)
+#-----------------------------Modificar los datos de educacion en el Json
+def modificar_educacion(curriculum):
+    
+    nivel = input("Nivel de educación: ")
+    titulos = input("Títulos obtenidos (separados por comas): ").split(", ")
+    instituciones = input("Instituciones educativas (separadas por comas): ").split(", ")
+
+    # Actualizar los datos de educacion
+    curriculum["educacion"]["nivel"] = nivel
+    curriculum["educacion"]["titulo"] = titulos
+    curriculum["educacion"]["institucion"] = instituciones
+
+    print("Datos de educación modificados correctamente.")
+#-----------------------------Modificar los datos de educacion en el Json
 
 
-#EJECUTA EL QUERY PARA MODIFICAR UNA DIRECCION DE UN CV
-def modificarDireccion(id,documento):
-    filtro = {"_id":id}
-    operacion = {"$set":{"datos_personales.direccion": documento}}
-    resultado = collection.update_one(filtro,operacion)
-    verificarActualizacion(resultado,"MODIFICACION DIRECCION")
-
-
-# VERIFICA QUE SI LA ULTIMA ACTUALIZACION FUE EJECUTA CON EXITO O NO
-def verificarActualizacion(resultado,mensagge):
-    if resultado.matched_count > 0 and resultado.modified_count > 0:
-        print("ACTUALIZACION EXITOSA {} \n".format(mensagge))
-        time.sleep(2)
-        return True
-    else:
-        print("ACTUALIZACION HA FALLADO {} \n".format(mensagge))
-        time.sleep(2)
-        return False
-
-
-# SOLICITA LOS DATOS PARA MODIFICAR EL RESUMEN Y LOS MODIFICA
-def modificacionDeResumen(id):
-    resumen = input(("INGRESE EL NUEVO RESUMEN CURRICULAR\n"))
-    filtro = {"_id":id}
-    proyeccion = {"$set":{"resumen":resumen}}
-    resultado = collection.update_one(filtro,proyeccion)
-    verificarActualizacion(resultado,"ACTUALIZACION DE RESUMEN")
-
-
-# SOLICITA LOS DATOS PARA MODIFICAR LOS DATOS DE EDUCACION Y LOS MODIFICA
-def modificacionEducacion(id):
-    nivel = input("INGRESAR NIVEL DE EDUDACION\n")
-    titulo = input("TITULO QUE DESEA AGREGAR SEPARAR CON COMA , SI SON VARIAS\n").split(",")
-    instituciones = input("UNIVERSIDAD QUE DESEA AGREGAR CON COMA , SI SON VARIAS\n").split(",")
-
-    filtro = {"_id":id}
-    proyeccion = {"$set":{"educacion.nivel":nivel}}
-    verificarActualizacion(collection.update_one(filtro,proyeccion),"MODIFICACION DEL NIVEL DE ESTUDIO\n")
-
-    proyeccion = {"$push":{"educacion.titulo":{"$each":titulo}}}
-    verificarActualizacion(collection.update_one(filtro,proyeccion),"MODIFICACION DE TITULOS\n")
-
-    proyeccion = {"$push":{"educacion.institucion":{"$each":instituciones}}}
-    verificarActualizacion(collection.update_one(filtro,proyeccion),"MODIFICACION DE INSTITUCIONES\n")
-
-
-#MODIFICA LOS DATOS LABORALES DE UN CV ESPECIFICO
-def modificarLaboral(id):
-    print("DESEA AÑADIR TRABAJO O PASANTIA")
-    print("1- TRABAJO\n")
-    print("2- PASANTIA\n")
-    option = int(input())
-    try:
-        if option == 1:
-            modificarTrajo(id)
-        if option == 2:
-            modificarPasantia(id)
-        else:
-            print("OPCION NO VALIDA\n")
-    except ValueError:
-            print("INGRESE UNA OPCION VALIDA\n")
-
-
-#MODIFICA LOS DATOS LABORALES DE UN CV ESPECIFICO
-def modificarTrajo(id):
-    print("DATOS DEL TRABAJO\n")
-    modalidad = input("MODALIDAD\n")
-    actividad = input("ACTIVIDAD\n")
-    fecha = input("FECHA\n")
-    documentoTrabajo = {
+#-----------------------------Agregar nuevos Datos de Trabajo en el Json
+def modificarTrabajo(curriculum):
+    print("\n== Añadir Laboral - Trabajo ==")
+    modalidad = input("Ingrese Modalidad: ")
+    actividad = input("Ingrese Actividad: ")
+    fecha = input("Ingrese Fecha: ")
+    nuevo_trabajo = {
         "modalidad": modalidad,
         "actividad": actividad,
         "fecha": fecha
     }
-    filtro = {"_id":id}
-    proyeccion = {"$push":{"laboral.trabajos":documentoTrabajo}}
-    verificarActualizacion(collection.update_one(filtro,proyeccion),"ACTUALIZACION TRABAJO")
+
+    # Verificar si existe la clave 'laboral' en el currículum
+    if 'laboral' not in curriculum:
+        curriculum['laboral'] = {}
+
+    # Verificar si existe la clave 'trabajos' en laboral
+    if 'trabajos' not in curriculum['laboral']:
+        curriculum['laboral']['trabajos'] = []
+
+    # Agregar el nuevo trabajo a la lista de trabajos
+    curriculum['laboral']['trabajos'].append(nuevo_trabajo)
+
+    print("Trabajo agregado correctamente.")
+#-----------------------------Agregar nuevos Datos de Trabajo en el Json
 
 
-# REALIZA CAMBIOS EN LOS DATOS DE PASANTIA DE UN CV
-def modificarPasantia(id):
-    print("DATOS DE LA PASANTIA\n")
-    duracion = input("DURACION\n")
-    lugar = input("LUGAR\n")
-    cargo = input("cargo\n")
-    documentoPasantia = {
-        "duracion":duracion,
-        "lugar":lugar,
-        "cargo":cargo
+#-----------------------------Agregar nuevos Datos de Pasantia en el Json
+def modificarPasantia(curriculum):
+    print("\n== Añadir Laboral - Pasantía ==")
+    duracion = input("Ingrese Duración: ")
+    lugar = input("Ingrese Lugar: ")
+    cargo = input("Ingrese Cargo: ")
+    nueva_pasantia = {
+        "duracion": duracion,
+        "lugar": lugar,
+        "cargo": cargo
     }
-    filtro = {"_id":id}
-    proyeccion = {"$push":{"laboral.pasantia":documentoPasantia}}
-    verificarActualizacion(collection.update_one(filtro,proyeccion),"ACTUALIZACION PASANTIA")
+
+    # Verificar si existe la clave 'laboral' en el currículum
+    if 'laboral' not in curriculum:
+        curriculum['laboral'] = {}
+
+    # Verificar si existe la clave 'pasantia' en laboral
+    if 'pasantia' not in curriculum['laboral']:
+        curriculum['laboral']['pasantia'] = []
+
+    # Agregar la nueva pasantía a la lista de pasantías
+    curriculum['laboral']['pasantia'].append(nueva_pasantia)
+
+    print("Pasantía agregada correctamente.")
+#-----------------------------Agregar nuevos Datos de Pasantia en el Json
 
 
-#DESPLIEGA EL MENU PARA MODIFICAR O AGREGAR UNA NUEVA HABILIDAD
-def modificacionHabilidades(id):
-    print("AGREGAR O MODIFICAR UNA HABILIDAD\n")
-    option = int(input("1- MODIFICAR HABILIDAD\n 2-AGREGAR HABILIDAD\n"))
+#-----------------------------Menu para modificar Trabajos y Pasantias
+def modificarLaboral(curriculum):
+    print("\n== Añadir ==")
+    print("1. Trabajo")
+    print("2. Pasantia\n")
+    print("=========================")
+    opcion = int(input("Ingrese opción => "))
     try:
-        if option == 1:
-            indice = buscarIndiceHabilidad(id)
-            habilidad = pedirHabilidad()
-            actualizarHabilidad(id,indice,habilidad)
-        if option == 2:
-            habilidad = pedirHabilidad()
-            agregarHabilidad(id,habilidad)
-            return
+        if opcion == 1:
+            modificarTrabajo(curriculum)
+        elif opcion == 2:
+            modificarPasantia(curriculum)
         else:
-            print("OPCION NO VALIDA\n")
+            print("Opcion no valida\n")
     except ValueError:
-            print("INGRESE UNA OPCION VALIDA\n")
+            print("Ingrese una opcion valida\n")
+#-----------------------------Menu para modificar Trabajos y Pasantias
 
 
-#AGREGA UNA NUEVA HABILIDAD INDICADA EN EL PARAMETRO EN UN CV ESPECIFICADO POR ID
-def agregarHabilidad(id,habilidad):
-    filtro = {"_id" :id}
-    operacion = {"$push": {"habilidades": habilidad}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"HABILIDAD AGREGADA")
+#-----------------------------Modificar Habilidades en el Json
+def modificarHabilidades(curriculum):
+    print("\n== Modificar Habilidades ==")
+    habilidades_input = input("Ingreselas nuevamente separadas por una coma: ")
+    
+    # Verificar si se ingresaron habilidades
+    if habilidades_input.strip():
+        habilidades = habilidades_input.split(",")
+        
+        # Verificar si existe la clave 'habilidades' en el currículum
+        if 'habilidades' not in curriculum:
+            curriculum['habilidades'] = []
 
+        # Reemplazar las habilidades existentes con las nuevas
+        curriculum['habilidades'] = habilidades
 
-#SOLICITA AL USUARIO QUE INGRESE EL NOMBRE DE UNA NUEVA HABILIDAD
-def pedirHabilidad():
-    habilidad = input("INGRESE LA HABILIDAD\n")
-    return habilidad
-
-
-# EJECUTA EL QUERY PARA MODIFICAR UNA HABILIDAD YA EXISTENTE
-def actualizarHabilidad(id,indice,habilidad):
-    filtro = {"_id" :id,f"habilidades.{indice}": {"$exists": True}}
-    operacion = {"$set": {f"habilidades.{indice}": habilidad}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"HABILIDAD MODIFICADO")
-
-
-# BUSCA UNA HABILIDAD ESPECIFICA Y RETORNA SU INDICE EN EL ARREGLO
-def buscarIndiceHabilidad(id):
-    filtro = {"_id":id}
-    proyeccion = {"habilidades": 1,"_id":0}
-    result = collection.find_one(filtro,proyeccion)
-
-    variable = result["habilidades"]
-
-    print("HABILIDADES REGISTRADOS \n")
-    for iterador, habilidad in enumerate(variable):
-        print("{} - habilidad : {}".format(iterador+1,habilidad))
-
-    iterador = int(input("CUAL HABILIDAD DESEA MODIFICAR \n"))
-
-    if iterador < 0 or iterador > len(variable):
-        print("ERROR NO SE ENCUENTRA ESE NUMERO\n")
+        print("Habilidades modificadas correctamente.")
     else:
-        iterador = iterador - 1
-        return iterador
+        print("No se ingresaron habilidades.")
+#-----------------------------Modificar Habilidades en el Json
 
 
-# DESPLIEGA UN MENU EN PANTALLA QUE OFRECE MODIFICARO AGREGAR UNA NUEVA HABILIDAD
-def modificarIntereses(id):
-    print("AGREGAR O MODIFICAR UNA INTERES\n")
-    option = int(input("1- MODIFICAR INTERES\n 2-AGREGAR INTERES\n"))
-    try:
-        if option == 1:
-            indice = buscarIndiceInteres(id)
-            interes = pedirInteres()
-            actualizarInteres(id,indice,interes)
-        elif option == 2:
-            interes = pedirInteres()
-            agregarInteres(id,interes)
-        else:
-            print("OPCION NO VALIDA\n")
-    except ValueError:
-        print("INGRESE UNA OPCION VALIDA\n")
+#-----------------------------Modificar Intereses en el Json
+def modificarIntereses(curriculum):
+    print("\n== Modificar Intereses ==")
+    intereses_input = input("Ingréselos nuevamente separados por una coma: ")
 
+    # Verificar si se ingresaron intereses
+    if intereses_input.strip():
+        intereses = intereses_input.split(",")
 
-#AGREGA UN NUEVO INTERES QUE RECIDIDO POR PARAMETRO EN LA FUNCION, Y ES AGREGADO EN UN CV ESPECIFICADO POR ID
-def agregarInteres(id,interes):
-    filtro = {"_id" :id}
-    operacion = {"$push": {"intereses": interes}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"INTERES AGREGADO")
+        # Verificar si existe la clave 'intereses' en el currículum
+        if 'intereses' not in curriculum:
+            curriculum['intereses'] = []
 
+        # Reemplazar los intereses existentes con los nuevos
+        curriculum['intereses'] = intereses
 
-# SOLICITA LOS INTERESES AL USUARIO Y LOS RETORNA
-def pedirInteres():
-    interes = input("INGRESE EL NUEVO INTERES\n")
-    return interes
-
-
-# INGRESA EN LA BASE DE DATOS UNA ACTUALIZACION DE ALGUN INTERES
-def actualizarInteres(id,indice,interes):
-    filtro = {"_id" :id,f"intereses.{indice}": {"$exists": True}}
-    operacion = {"$set": {f"intereses.{indice}": interes}}
-    verificarActualizacion(collection.update_one(filtro, operacion),"INTERES MODIFICADO")
-
-
-#BUSCA EL INDICE DE UN INTERES ESPECIFICO DENTRO DE UN ARREGLO Y RETORNA SU POSICION
-def buscarIndiceInteres(id):
-    filtro = {"_id":id}
-    proyeccion = {"intereses": 1,"_id":0}
-    result = collection.find_one(filtro,proyeccion)
-
-    variable = result["intereses"]
-
-    print("INTERESES REGISTRADOS \n")
-    for iterador, interes in enumerate(variable):
-        print("{} - habilidad : {}".format(iterador+1,interes))
-
-    iterador = int(input("CUAL INTERES DESEA MODIFICAR \n"))
-
-    if iterador < 0 or iterador > len(variable):
-        print("ERROR NO SE ENCUENTRA ESE NUMERO\n")
+        print("Intereses modificados correctamente.")
     else:
-        iterador = iterador - 1
-        return iterador
+        print("No se ingresaron intereses.")
+#-----------------------------Modificar Intereses en el Json
 
 
-#DESPLIEGA EN PANTALLA UN MENU QUE OFRECE LAS DIFENTES OPCIONES PARA MODIFICAR UN CV
-def menuModificacion():
+#-----------------------------Menu para modificar los datos del Json
+def menuModificacion(curriculum):
+
     while True:
-        print("\n\t\tMENU PARA MODIFICACION DE DATOS DEL CV\n")
-        print("1-MODIFICAR EL RESUMEN\n")
-        print("2-MODIFICAR DATOS PERSONALES\n")
-        print("3-MODIFICAR EL DATOS DE EDUCACION\n")
-        print("4-MODIFICAR DATOS LABORALES\n")
-        print("5-MODIFICAR DATOS DE HABILIDADES\n")
-        print("6-MODIFICAR DATOS DE INTERESES\n")
-        print("0-SALIR DEL MENU MODIFICACION\n")
-        option = int(input())
+        print("\n== Menu para Modificación de Datos del CV ==")
+        print("Seleccione una opción:")
+        print("1. Modificar el Resumen")
+        print("2. Modificar Datos Personales")
+        print("3. Modificar Email")
+        print("4. Modificar Telefono")
+        print("5. Modificar Redes Sociales")
+        print("6. Modificar el Datos de Educación")
+        print("7. Modificar Datos Laborales")
+        print("8. Modificar Datos de Habilidades")
+        print("9. Modificar Datos de Intereses")
+        print("0. Realizar Cambios - (Volver al Menu Principal)")
+        print("=========================")
+        opcion = int(input("Ingrese opción => "))
 
         try:
-            if option == 1:
-                modificacionDeResumen(mostrarLista())
-            elif option == 2:
-                modificacionDeDatosPersonales(mostrarLista())
-            elif option == 3:
-                modificacionEducacion(mostrarLista())
-            elif option == 4:
-                modificarLaboral(mostrarLista())
-            elif option == 5: 
-                modificacionHabilidades(mostrarLista())
-            elif option == 6:
-                modificarIntereses(mostrarLista())
-            elif option == 0:
+            if opcion == 1:
+                modificar_resumen(curriculum)
+            elif opcion == 2:
+                modificar_datos_personales(curriculum)
+            elif opcion == 3:
+                modificar_email(curriculum)
+            elif opcion == 4:
+                modificar_telefono(curriculum)
+            elif opcion == 5: 
+                modificar_redes(curriculum)
+            elif opcion == 6:
+                modificar_educacion(curriculum)
+            elif opcion == 7:
+                modificarLaboral(curriculum)
+            elif opcion == 8:
+                modificarHabilidades(curriculum)
+            elif opcion == 0:
                 return
             else:
-                print("OPCION NO VALIDAD\n")
+                print("Opcion no valida\n")
                 time.sleep(2)
         except ValueError:
-            print("INGRESE UNA OPCION VALIDA\n")
+            print("Ingrese una opcion valida\n")
+#-----------------------------Menu para modificar los datos del Json
 
 
-#MUESTRA UNA LISTA SIMPLE EN PANTALLA DE LOS NOMBRES DE CV Y SU RESUMEN CURRICULAR
-def mostrarLista():
-    indice = buscarIndice()
-    id = buscarId(indice)
-    return id
-
-
-# Mostrar las habilidades de todos los CVs
-def imprimir_habilidades(collection):
-    print("\n== Habilidades de los Currículums ==")
-    
-    cursor = collection.find()
-
-    for curr in cursor:
-        print("\nCurrículum:")
-        print(f"ID: {curr['_id']}")
-        print(f"Nombre: {curr['datos_personales']['nombre']} {curr['datos_personales']['apellido']}")
-
-        # Utilizar get para manejar la posible falta de la clave 'habilidades'
-        habilidades = curr.get('habilidades', [])
-
-        # Imprimir las habilidades solo si están presentes
-        if habilidades:
-            print(f"Habilidades ({len(habilidades)}): {', '.join(habilidades)}")
-        else:
-            print("No hay habilidades registradas.")
-
-        print("\n-----------------------------")
-
-    print("Fin de la lista de currículums.\n")
-
-
-# Mostrar las habilidades por CV
-def imprimir_habilidades_por_id(collection):
-    cv_id = input("\nIngrese el ID del currículum a imprimir: ")
+#-----------------------------Modificar la información de un CV por cédula
+def modificar_curriculum_por_cedula():
+    cedula_a_modificar = input("\nIngrese la cédula del currículum a modificar: ")
 
     try:
-        cv_object_id = ObjectId(cv_id)
-        result = collection.find_one({"_id": cv_object_id})
+        with open("cv.json", "r") as archivo:
+            cvs_existentes = json.load(archivo)
 
-        if result:
-            print("\nCurrículum:")
-            print(f"ID: {result['_id']}")
-            print(f"Nombre: {result['datos_personales']['nombre']} {result['datos_personales']['apellido']}")
+        # Buscar el currículum con la cédula especificada
+        encontrado = False
+        for cv in cvs_existentes:
+            if "datos_personales" in cv and "cedula" in cv["datos_personales"] and cv["datos_personales"]["cedula"] == cedula_a_modificar:
+                menuModificacion(cv)
+                encontrado = True
+                break
 
-            # Utilizar get para manejar la posible falta de la clave 'habilidades'
-            habilidades = result.get('habilidades', [])
+        if encontrado:
+            # Guardar los currículums actualizados en el archivo
+            with open("cv.json", "w") as archivo:
+                json.dump(cvs_existentes, archivo, indent=2)
 
-            # Imprimir las habilidades solo si están presentes
-            if habilidades:
-                print(f"Habilidades ({len(habilidades)}): {', '.join(habilidades)}")
+            # Buscar el currículum en MongoDB
+            curriculum_en_bd = collection.find_one({"datos_personales.cedula": cedula_a_modificar})
+
+            if curriculum_en_bd:
+                # Actualizar el currículum en la colección
+                collection.replace_one({"datos_personales.cedula": cedula_a_modificar}, cv)
+
+                print(f"\nSe modificó correctamente el currículum con cédula {cedula_a_modificar} en el archivo JSON y en la colección de MongoDB.")
             else:
-                print("No hay habilidades registradas.")
-
-            print("\n-----------------------------")
+                print(f"No se encontró el currículum con cédula {cedula_a_modificar} en la base de datos.")
         else:
-            print(f"No se encontró ningún currículum con el ID: {cv_id}")
-    except (ValueError, bson.errors.InvalidId):
-        print("ID no válido. Por favor, ingrese un ID de currículum válido.")
+            print(f"\nNo se encontró ningún currículum con la cédula {cedula_a_modificar}.")
+
+    except (json.decoder.JSONDecodeError, FileNotFoundError):
+        print("Error al leer el archivo de currículums.")
+    except Exception as e:
+        print(f"Error al modificar el currículum en MongoDB: {str(e)}")
+#-----------------------------Modificar la información de un CV por cédula
+
+#----------------------------------------Funciones para modificar CV
 
 
-#Opciones del menú
+#----------------------------------------Opciones del menú
 def show_menu():
     print("\n== Menú de Operaciones ==")
     print("Seleccione una opción:")
@@ -805,23 +608,26 @@ def show_menu():
     print("5. Mostrar todos los CVs")
     print("6. Intereses más comunes")
     print("7. Herramientas manejadas por cada individuo")
-    print("8. Herramientas manejadas por CV")
-    print("9. Trabajos realizados")
-    print("10. Salir")
+    print("8. Trabajos realizados")
+    print("9. Salir")
     print("=========================")
+#----------------------------------------Opciones del menú
 
 
-#Conexion con la BD
+#----------------------------------------Conexion con la Base de Datos
 collection = connect_to_mongodb()
+#----------------------------------------Conexion con la Base de Datos
 
 
-#Programa principal
+#----------------------------------------Programa principal
 def main():
-    
-    # Insertar datos al inicio del programa (solo si no se han insertado antes)
-    insert_data(collection)
 
     while True:
+
+        # Insertar datos al inicio del programa (solo si no se han insertado antes)
+        insert_data(collection)
+
+        # Mostrar opciones
         show_menu()
 
         try:
@@ -829,28 +635,27 @@ def main():
             if opcion == 1:
                 solicitarDatosCV()
             elif opcion == 2:
-                menuModificacion()
+                modificar_curriculum_por_cedula()
             elif opcion == 3:
-                eliminar_cv_por_id(collection)
+                eliminar_cv_por_cedula(collection)
             elif opcion == 4:
-                buscar_cv_por_id(collection)
+                imprimir_curriculum_por_cedula(collection)
             elif opcion == 5:
-                mostrar_todos_cv(collection)
+                imprimir_todos_los_cv(collection)
             elif opcion == 6:
-                print("opcion 1")
+                print("opcion 6")
             elif opcion == 7:
-                imprimir_habilidades(collection)
-            elif opcion == 8:
-                imprimir_habilidades_por_id(collection)
-            elif opcion == 9:
                 print("opcion 1")
-            elif opcion == 10:
+            elif opcion == 8:
+                print("opcion 1")
+            elif opcion == 9:
                 print("Saliendo del programa. ¡Hasta luego!")
                 break
             else:
                 print("Opción no válida. Por favor, elija una opción válida.")
         except ValueError:
             print("Por favor, ingrese un número válido.")
+#----------------------------------------Programa principal
 
 
 #Main
