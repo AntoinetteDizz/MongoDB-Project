@@ -216,7 +216,7 @@ def solicitarDatosCV():
     with open("cv.json", "w") as archivo:
         json.dump(cvs_existentes, archivo, indent=2)
 #----------------------------------------Solicitar datos del CV
-
+        
 
 #----------------------------------------Eliminar CV por cédula
 def eliminar_cv_por_cedula(collection):
@@ -597,6 +597,30 @@ def modificar_curriculum_por_cedula():
 #----------------------------------------Funciones para modificar CV
 
 
+#----------------------------------------Consultar las herramientas(habilidades) de cada individuo
+def consultar_herramientas_por_individuo(collection):
+    print("\n== Herramientas de los Currículums ==")
+    
+    # Obtener todos los currículums
+    curriculums = collection.find()
+
+    # Iterar sobre cada currículum
+    for curriculum in curriculums:
+        cedula = curriculum.get("datos_personales", {}).get("cedula")
+        herramientas = curriculum.get("habilidades", [])
+
+        # Contar la cantidad de herramientas manejadas
+        cantidad_herramientas = len(herramientas)
+
+        # Imprimir la información
+        print(f"\nCédula: {cedula}")
+        print(f"Herramientas: {', '.join(herramientas)}")
+        print(f"Cantidad de Herramientas: {cantidad_herramientas}")
+    
+    print("\nFin de la lista de currículums.\n")
+#----------------------------------------Consultar las herramientas(habilidades) de cada individuo
+
+
 #----------------------------------------Opciones del menú
 def show_menu():
     print("\n== Menú de Operaciones ==")
@@ -645,7 +669,7 @@ def main():
             elif opcion == 6:
                 print("opcion 6")
             elif opcion == 7:
-                print("opcion 1")
+                consultar_herramientas_por_individuo(collection)
             elif opcion == 8:
                 print("opcion 1")
             elif opcion == 9:
