@@ -231,23 +231,24 @@ def eliminar_cv_por_cedula(collection):
         eliminado = False
         for cv in cvs_existentes:
             if "datos_personales" in cv and "cedula" in cv["datos_personales"] and cv["datos_personales"]["cedula"] == cedula_a_eliminar:
-                print(f"Se eliminó correctamente el currículum con cédula {cedula_a_eliminar}")
+                print(f"Se eliminó correctamente el currículum con cédula {cedula_a_eliminar} del Json")
                 eliminado = True
             else:
                 nuevo_json.append(cv)
 
         if not eliminado:
-            print(f"No se encontró ningún currículum con la cédula {cedula_a_eliminar}")
+            print(f"No se encontró ningún currículum con la cédula {cedula_a_eliminar} en el Json")
 
         # Guardar los currículums restantes en el archivo
         with open("cv.json", "w") as archivo:
             json.dump(nuevo_json, archivo, indent=2)
 
+        # Eliminar currículums de la Base de Datos MongoDB
+        result = collection.delete_many({"datos_personales.cedula": cedula_a_eliminar})
+        print(f"Se eliminaron {result.deleted_count} currículums de la base de datos MongoDB.")
+
     except (json.decoder.JSONDecodeError, FileNotFoundError):
         print("Error al leer el archivo de currículums.")
-    
-    # Eliminar curriculums de la Base de Datos
-    collection.delete_many({})
 #----------------------------------------Eliminar CV por cédula
 
 
@@ -621,6 +622,106 @@ def consultar_herramientas_por_individuo(collection):
 #----------------------------------------Consultar las herramientas(habilidades) de cada individuo
 
 
+#----------------------------------------Consultar los intereses comunes 
+def consultar_intereses_comunes(collection):
+    interes_a_buscar = input("\nIngrese el interés a buscar en los currículums: ")
+
+     # Obtener todos los currículums
+    curriculums = collection.find()
+
+    contador = 0 
+
+    # Iterar sobre cada currículum
+    for curr in curriculums:
+        # Obtener los intereses del currículum
+        intereses_curr = curr.get("intereses", [])
+
+        # Verificar si el interés buscado está en los intereses del currículum
+        if interes_a_buscar in intereses_curr:
+
+            # Incrementar el contador
+            contador += 1
+
+            # Imprimir el currículum solo si tiene el interés buscado
+            print("\nCurrículum:")
+            print(f"ID: {curr['_id']}")
+            
+            # Imprimir todos los campos del currículum
+            print("Resumen:", curr.get("resumen"))
+            datos_personales = curr.get("datos_personales", {})
+            print("Datos Personales:")
+            print(f"  Cedula: {datos_personales.get('cedula')}")
+            print(f"  Nombre: {datos_personales.get('nombre')}")
+            print(f"  Apellido: {datos_personales.get('apellido')}")
+            direccion = curr.get("direccion", {})
+            print("Direccion:")
+            print(f"  Pais: {direccion.get('pais')}")
+            print(f"  Estado: {direccion.get('estado')}")
+            print(f"  Ciudad: {direccion.get('ciudad')}")
+            print(f"  Residencia: {direccion.get('residencia')}")
+            print("Telefono:", curr.get("telefono", []))
+            print("Email:", curr.get("email"))
+            redes = curr.get("redes", {})
+            print("Redes:")
+            print(f"  Facebook: {redes.get('facebook')}")
+            print(f"  Instagram: {redes.get('instagram')}")
+            print(f"  Github: {redes.get('github')}")
+            educacion = curr.get("educacion", {})
+            print("Educacion:")
+            print(f"  Nivel: {educacion.get('nivel')}")
+            print(f"  Titulos: {', '.join(educacion.get('titulo', []))}")
+            print(f"  Instituciones: {', '.join(educacion.get('institucion', []))}")
+            laboral = curr.get("laboral", {})
+            print("Laboral:")
+            print("  Pasantias:")
+            for pasantia in laboral.get("pasantia", []):
+                print(f"    Duracion: {pasantia.get('duracion')}, Lugar: {pasantia.get('lugar')}, Cargo: {pasantia.get('cargo')}")
+            print("  Trabajos:")
+            for trabajo in laboral.get("trabajos", []):
+                print(f"    Modalidad: {trabajo.get('modalidad')}, Actividad: {trabajo.get('actividad')}, Fecha: {trabajo.get('fecha')}")
+            print("Habilidades:", ', '.join(curr.get("habilidades", [])))
+            print("Intereses:", ', '.join(intereses_curr))
+            print("\n-----------------------------")
+
+    # Imprimir el número total de currículums con intereses comunes
+    print(f"\nTotal de currículums con intereses en común: {contador}")
+   
+    print("\nFin de la lista de currículums.\n")
+#----------------------------------------Consultar los intereses comunes 
+
+
+#----------------------------------------Consultar los trabajos de cada individuo
+def consultar_trabajos_realizados(collection):
+    print("\n== Trabajos de los Currículums ==")
+    
+    # Obtener todos los currículums
+    curriculums = collection.find()
+
+    # Iterar sobre cada currículum
+    for curriculum in curriculums:
+        cedula = curriculum.get("datos_personales", {}).get("cedula")
+        trabajos = curriculum.get("laboral", {}).get("trabajos", [])
+
+        # Contar la cantidad de trabajos
+        cantidad_trabajos = len(trabajos)
+
+        # Imprimir la información laboral
+        print(f"\nCédula: {cedula}")
+        if trabajos:
+            print("Trabajos:")
+            for trabajo in trabajos:
+                modalidad = trabajo.get("modalidad", "")
+                actividad = trabajo.get("actividad", "")
+                fecha = trabajo.get("fecha", "")
+                print(f"- Modalidad: {modalidad}, Actividad: {actividad}, Fecha: {fecha}")
+            print(f"Cantidad de trabajos: {cantidad_trabajos}")
+        else:
+            print("No se encontraron trabajos registrados para este individuo.")
+    
+    print("\nFin de la lista de currículums.\n")
+#----------------------------------------Consultar los trabajos de cada individuo
+
+
 #----------------------------------------Opciones del menú
 def show_menu():
     print("\n== Menú de Operaciones ==")
@@ -667,11 +768,11 @@ def main():
             elif opcion == 5:
                 imprimir_todos_los_cv(collection)
             elif opcion == 6:
-                print("opcion 6")
+                consultar_intereses_comunes(collection)
             elif opcion == 7:
                 consultar_herramientas_por_individuo(collection)
             elif opcion == 8:
-                print("opcion 1")
+                consultar_trabajos_realizados(collection)
             elif opcion == 9:
                 print("Saliendo del programa. ¡Hasta luego!")
                 break
